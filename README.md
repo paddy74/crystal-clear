@@ -7,19 +7,15 @@ Getting a copy of the project running on your local machine for development and 
 ### Prerequisites
 What is needed to install the software and how to install them.
 ```
-Example
+Coming soon
 ```
 
 ### Installing
 How to set up the development enviornment.
 
-Step
+Step 1:
 ```
-Example
-```
-Step
-```
-Example
+Coming soon
 ```
 
 ## Running the Tests
@@ -44,15 +40,15 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository]().
 
 ## Authors
-* **Jeffery Baxter** - *Contributor* - (GitHub Username)[https://github.com/username)
-* **Villa Cadle** - *Contributor* - (GitHub Username)[https://github.com/username)
-* **Rufor Chen** - *Contributor* - (GitHub Username)[https://github.com/username)
-* **Patrick Cox** - *Contributor* - (paddy74)[https://github.com/paddy74)
-* **Jason Dery** - *Contributor* - (GitHub Username)[https://github.com/username)
-* **Rachael Holiday** - *Contributor* - (GitHub Username)[https://github.com/username)
-* **Forrest Knight** - *Contributor* - (GitHub Username)[https://github.com/username)
-* **Sinh Ly** - *Contributor* - (GitHub Username)[https://github.com/username)
-* **Tristan O'Neil** - *Contributor* - (GitHub Username)[https://github.com/username)
+* **Jeffery Baxter** - *Contributor* - [JeffreyBax](https://github.com/JeffreyBax)
+* **Villa Cadle** - *Contributor* - [vcadle](https://github.com/vcadle)
+* **Rufor Chen** - *Contributor* - [zhPaint](https://github.com/zhPaint)
+* **Patrick Cox** - *Contributor* - [paddy74](https://github.com/paddy74)
+* **Jason Dery** - *Contributor*
+* **Rachael Holiday** - *Contributor* - [rholi003](https://github.com/rholi003)
+* **Forrest Knight** - *Contributor* - [ForrestKnight](https://github.com/ForrestKnight)
+* **Sinh Ly** - *Contributor*
+* **Tristan O'Neil** - *Contributor* - [tonei](https://github.com/tonei)
 
 See also the list of [contributors](https://github.com/paddy74/cs532-s17/graphs/contributors) who participated in this project.
 
@@ -60,5 +56,5 @@ See also the list of [contributors](https://github.com/paddy74/cs532-s17/graphs/
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgments
-* Our professor (Thomas Kennedy)[http://www.cs.odu.edu/~tkennedy/]
-* Our academic advisor (Janet Brunelle)[http://www.cs.odu.edu/~brunelle/]
+* Our professor [Thomas Kennedy](http://www.cs.odu.edu/~tkennedy/)
+* Our academic advisor [Janet Brunelle](http://www.cs.odu.edu/~brunelle/)
