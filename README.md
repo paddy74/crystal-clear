@@ -44,10 +44,10 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * **Villa Cadle** - *Contributor* - [vcadle](https://github.com/vcadle)
 * **Rufor Chen** - *Contributor* - [zhPaint](https://github.com/zhPaint)
 * **Patrick Cox** - *Contributor* - [paddy74](https://github.com/paddy74)
-* **Jason Dery** - *Contributor*
+* **Jason Dery** - *Contributor* - [Jdery](https://github.com/Jdery)
 * **Rachael Holiday** - *Contributor* - [rholi003](https://github.com/rholi003)
 * **Forrest Knight** - *Contributor* - [ForrestKnight](https://github.com/ForrestKnight)
-* **Sinh Ly** - *Contributor*
+* **Sinh Ly** - *Contributor* - [lyst-01](https://github.com/lyst-01)
 * **Tristan O'Neil** - *Contributor* - [tonei](https://github.com/tonei)
 
 See also the list of [contributors](https://github.com/paddy74/cs532-s17/graphs/contributors) who participated in this project.
