@@ -40,10 +40,10 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository]().
 
 ## Authors
-* **Jeffery Baxter** - *Contributor* - [JeffreyBax](https://github.com/JeffreyBax)
+* **Jeffrey Baxter** - *Contributor* - [JeffreyBax](https://github.com/JeffreyBax)
 * **Villa Cadle** - *Contributor* - [vcadle](https://github.com/vcadle)
 * **Rufor Chen** - *Contributor* - [zhPaint](https://github.com/zhPaint)
-* **Patrick Cox** - *Contributor* - [paddy74](https://github.com/paddy74)
+* **Patrick Cox** - *Project Manager* - [paddy74](https://github.com/paddy74)
 * **Jason Dery** - *Contributor* - [Jdery](https://github.com/Jdery)
 * **Rachael Holiday** - *Contributor* - [rholi003](https://github.com/rholi003)
 * **Forrest Knight** - *Contributor* - [ForrestKnight](https://github.com/ForrestKnight)
