@@ -1,38 +1,6 @@
 # Crystal CLEAR
 **C**ontinuous **L**anguage **E**ducation through **A**ugumented **R**eality
 
-## Getting Started
-Getting a copy of the project running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisites
-What is needed to install the software and how to install them.
-```
-Coming soon
-```
-
-### Installing
-How to set up the development enviornment.
-
-Step 1:
-```
-Coming soon
-```
-
-## Running the Tests
-Running the automated tests for this system.
-
-### End to End Tests
-
-
-### Coding Style Tests
-
-
-## Deployment
-How to deploy this project on a live system.
-
-## Built With
-
-
 ## Contributing
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
