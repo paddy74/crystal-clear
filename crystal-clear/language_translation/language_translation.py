@@ -35,12 +35,6 @@ class langTranslation:
             if found == 0:
                 print ("No match could be found.")
 
-    def _init_(self, english, spanish, eng_Phrase, spn_Phrase):
-        self.native_Word = english
-        self.translated_Word = spanish
-        self.native_Phrase = eng_Phrase
-        self.translated_Phrase = spn_Phrase
-
     def getNativeWord (self):
         return native_Word
 
