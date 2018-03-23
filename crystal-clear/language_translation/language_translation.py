@@ -18,6 +18,9 @@ class langTranslation:
 
     #Public functions
     def _init_(self, native):
+        self.updateEntry(native)
+
+    def updateEntry (self, native):
         with open(inPath, "r") as input:
             found = 0
             for line in input:
