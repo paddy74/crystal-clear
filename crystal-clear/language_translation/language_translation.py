@@ -23,10 +23,13 @@ def search_file(file, word):
     value : str or numpy array
         Value found in the loaded file.
     """
-    f = pickle.load(open(file, 'rb'))
-    value = f[word]
+    try:
+        f = pickle.load(open(file, 'rb'))
+        value = f[word]
 
-    return value
+        return value
+    except KeyError:
+        return "No match found"
 
 
 class Translator:
@@ -43,7 +46,7 @@ class Translator:
         self.lang_target = lang_target
 
     def translate(self, word, definition=False, use_case=False, audio=False):
-        """Translates a word a gets requested descriptors
+        """Translates a word and gets requested descriptors
 
         Parameters
         ----------
