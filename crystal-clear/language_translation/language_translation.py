@@ -4,8 +4,12 @@ Translates a native word into the target language and returns with descriptors.
 Translates a native word into the target language and returns with optional
 descriptors of definition, example use case, and audio pronunciation.
 
+
+
 """
 import pickle
+PATH_TO_TRANSLATION = './crystal-clear/language_translation/data/spanish/translation.pkl'
+PATH_TO_DEFINITION = './crystal-clear/language_translation/data/spanish/definition.pkl'
 
 
 def search_file(file, word):
@@ -26,10 +30,9 @@ def search_file(file, word):
     try:
         f = pickle.load(open(file, 'rb'))
         value = f[word]
-
         return value
     except KeyError:
-        return "No match found"
+        return None
 
 
 class Translator:
@@ -91,4 +94,8 @@ class Translator:
         -------
 
         """
-        return "./data/{}/{}.pkl".format(self.lang_target, file)
+        if file == "translation":
+            return PATH_TO_TRANSLATION
+        elif file == "definition":
+            return PATH_TO_DEFINITION
+        #return "./data/{}/{}.pkl".format(self.lang_target, file)
