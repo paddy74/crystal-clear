@@ -193,7 +193,7 @@ Builder.load_string('''
 			opacity: 1 if self.state == 'normal' else .5
 			on_press:
 				root.manager.transition.direction = 'left'
-				root.manager.current = 'report'
+				root.manager.current = 'report' 
 		
 		
 		AnchorLayout:
