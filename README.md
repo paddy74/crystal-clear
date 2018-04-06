@@ -1,5 +1,6 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/paddy74/crystal-clear.svg?branch=master)](https://travis-ci.org/paddy74/crystal-clear)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/17fd79b0fb414acc86d791d68c7c4ac0)](https://www.codacy.com/app/paddy74/crystal-clear?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=paddy74/crystal-clear&amp;utm_campaign=Badge_Grade)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Crystal CLEAR
 
