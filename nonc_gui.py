@@ -1,5 +1,4 @@
 import cv2 
-import webbrowser
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.graphics import Color, Rectangle
@@ -21,7 +20,6 @@ import subprocess
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from kivy.uix.boxlayout import BoxLayout
 import sys
 
 PATH_TO_OBJ_REC = './crystal-clear/object_detection/classify_image.py'
@@ -64,7 +62,9 @@ Builder.load_string('''
 				size: 150, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
-		
+				on_press:
+					root.manager.current = 'hist'
+				
 		AnchorLayout:
 			anchor_x:'center'
 			anchor_y:'bottom'
@@ -280,32 +280,24 @@ Builder.load_string('''
 			
 			
 
-		Button: 
-			text: root.button_text
+		Button:
+			id: natlang
+			text: 'Native'
 			size: 150, 60
 			size_hint: None, None
 			pos: root.width/2 - self.width/2, root.height - 2 * self.height
 			opacity: 1 if self.state == 'normal' else .5
-			on_release: root.open_drop_down(self)
-		
-		Button: 
-			text: root.button_text2
-			size: 150, 60
-			size_hint: None, None
-			pos: root.width/2 - self.width/2, root.height - 4 * self.height
-			opacity: 1 if self.state == 'normal' else .5
-			on_release: root.open_2(self)
-			
+	#		on_release: dropdown.open(self)
 			
 		Button:
 			text: 'Download Languages'
 			size: 150, 60
 			size_hint: None, None
-			pos: root.width/2 - self.width/2, root.height - 6 * self.height
+			pos: root.width/2 - self.width/2, root.height - 4 * self.height
 			opacity: 1 if self.state == 'normal' else .5
 			on_press:
 				root.manager.transition.direction = 'left'
-				root.manager.current = 'download'
+				root.manager.current = 'power'
 	
 		AnchorLayout:
 			anchor_x:'left'
@@ -336,156 +328,10 @@ Builder.load_string('''
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press: app.get_running_app().stop()
-<CustomDropDown1>:
-    padding: [0,0,0,0]
-    Button:
-        text: 'English'
-        size:(200,50)
-        size_hint:(None,None)
-        text_size: self.size
-        valign: 'center'
-        padding: (10,0)
-        on_release: root.select(self.text)
-    Button:
-        text: 'Spanish'
-        size:(200,50)
-        size_hint:(None,None)
-        text_size: self.size
-        valign: 'center'
-        padding: (10,0)
-        on_release: root.select(self.text)
-    Button:
-        text: 'Pig Latin'
-        size:(200,50)
-        size_hint:(None,None)
-        text_size: self.size
-        valign: 'center'
-        padding: (10,0)
-        on_release: root.select(self.text)
-		
-<CustomDropDown2>:
-    padding: [0,0,0,0]
-    Button:
-        text: 'English'
-        size:(200,50)
-        size_hint:(None,None)
-        text_size: self.size
-        valign: 'center'
-        padding: (10,0)
-        on_release: root.select(self.text)
-    Button:
-        text: 'Spanish'
-        size:(200,50)
-        size_hint:(None,None)
-        text_size: self.size
-        valign: 'center'
-        padding: (10,0)
-        on_release: root.select(self.text)
-    Button:
-        text: 'Pig Latin'
-        size:(200,50)
-        size_hint:(None,None)
-        text_size: self.size
-        valign: 'center'
-        padding: (10,0)
-        on_release: root.select(self.text)
-				
+
 <PowerScreen>:
 
 	RelativeLayout:
-	
-		Label:
-			text: 'Power Settings'
-			font_size: '26sp'
-			bold: True
-			halign: 'center'
-			valign: 'top'
-			text_size: self.size
-			
-		Button:
-			text: 'Low Power Mode'
-			size: 150, 60
-			size_hint: None, None
-			pos: root.width/2 - self.width/2, root.height - 6 * self.height
-			opacity: 1 if self.state == 'normal' else .5
-				
-		Button:
-			text: 'High Power Mode'
-			size: 150, 60
-			size_hint: None, None
-			pos: root.width/2 - self.width/2, root.height - 4 * self.height
-			opacity: 1 if self.state == 'normal' else .5
-
-			
-		AnchorLayout:
-			anchor_x:'left'
-			anchor_y:'top'
-			
-			Button:
-				text: ''
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press:
-					root.manager.transition.direction = 'right'
-					root.manager.current = 'settings'
-			    Image:
-					source: 'kivy.png'
-					y: self.parent.y
-					x: self.parent.x
-					size: 80, 60
-					#allow_stretch: True
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
-
-<DownloadScreen>:
-
-	RelativeLayout:
-	
-	
-		Label:
-			text: 'Downloaded Languages'
-			font_size: '26sp'
-			bold: True
-			halign: 'center'
-			valign: 'top'
-			text_size: self.size
-			
-		
-			
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
-		
-		AnchorLayout:
-			anchor_x: 'center'
-			anchor_y: 'bottom'
-					
-			Button:
-				text: 'Download Packs'
-				multiline: True
-				size: 150, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: root.website()
-		
-		
-		
 		AnchorLayout:
 			anchor_x:'left'
 			anchor_y:'top'
@@ -504,13 +350,17 @@ Builder.load_string('''
 					x: self.parent.x
 					size: 80, 60
 					#allow_stretch: True
-		Button:
-			text: 'Display Downloaded Languages'
-			size: 80, 60
-			size_hint: None, None
-			opacity: 1 if self.state == 'normal' else .5
-			on_release: app.dlist(self)
-
+		AnchorLayout:
+			anchor_x: 'right'
+			anchor_y: 'top'
+					
+			Button:
+				text: 'Exit'
+				size: 80, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: app.get_running_app().stop()
+	
 <IssueScreen>:
 	email: email_in
 	sub: sub_in
@@ -615,6 +465,24 @@ Builder.load_string('''
 				pos_hint: {'center_x' : .5, 'center_y' : .1}
 				size_hint: [.5, .08]
 				on_press: app.save(email_in.text, sub_in.text, report_in.text)
+				
+			
+		
+		
+    #	DropDown:
+	#		id: 'dropdown'
+	#		on_parent: self.dismiss()
+	#		on_select: btn.text = '{}'.format(args[1])
+	#
+	#		Button:
+	#			text: 'English'
+	#			size: 100, 60
+	#			on_release: dropdown.select('English')
+	#		
+	#		Button:
+	#			text: 'Spanish'
+	#			size: 100, 60
+	#			on_release: dropdown.select('Spanish')
 	
 	
 ''')
@@ -632,17 +500,6 @@ class LanguageScreen(Screen) :
 	pass
 
 class LanguagesScreen(Screen) :
-	button_text = StringProperty('English')
-	button_text2 = StringProperty('Spanish')
-	def __init__(self, **kwargs):
-		super(LanguagesScreen, self).__init__(**kwargs)
-		self.dropdown = CustomDropDown1(self)
-		self.dropdown2 = CustomDropDown2(self)
-	
-	def open_drop_down(self, widget):
-		self.dropdown.open(widget)
-	def open_2(self, widget):
-		self.dropdown2.open(widget)
 	pass	
 	
 class PowerScreen(Screen) :
@@ -655,11 +512,6 @@ class CustomDropDown(DropDown):
 	pass
 	
 class ReportScreen(Screen) :
-	pass
-
-class DownloadScreen(Screen) : 
-	def website(instance):
-		webbrowser.open('http://www.cs.odu.edu/~411crystal/')
 	pass
 	
 class CameraScreen(Screen):
@@ -691,58 +543,8 @@ class CameraScreen(Screen):
 		trans, data = temp.translate(label, True, False, False)
 		self.objectLabel = guess + "Translation of \'" + label + "\': " + str(trans) + "\nDefinition: " + str(data["definition"])
 		return	
-		
-	#Function to insert data into the SQLITE database, history table 
-	#Takes parameters for the word, the confidence level, the native language, the translated language, and a time stamp
-	def insertObjectIntoHistoryDB(word, clevel, translatedWord, timeStamp):
-		#Connect to DB
-		conn = sqlite3.connect('sqlitedb.db')
-
-		#Cursor for DB object
-		c = conn.cursor()
-
-		#Get number of objects in DB
-		c.execute("select count(*) from history")
-
-		#Object to hold first tuple in DB
-		all_rows = c.fetchone()
-
-		#Object to hold first element in first tuple which is the count of the number of objects
-		numOfObjects = all_rows[0]
-
-		#Check if there are more than 10 objects in the DB
-		if numOfObjects > 10:
-			
-			#Delete oldest object if there are more than 10
-			c.execute("delete from history where timeStamp IN (select MIN(timeStamp) from history)")
-
-		#Insert New object into DB
-		c.execute("insert into history (word, clevel, translatedWord, timeStamp) values (?,?,?,?)", (word, clevel, translatedWord, timeStamp))
-
-		#Save (commit) the changes
-		conn.commit()
-
-		#Close the connection
-		conn.close()
-
-		#End of function
 	pass
-	
-class CustomDropDown1(DropDown):
-	def __init__(self, screen_manager, **kwargs):
-		super(CustomDropDown1, self).__init__(**kwargs)
-		self.sm = screen_manager
-      
-	def on_select(self, data):
-		self.sm.button_text = data
-		
-class CustomDropDown2(DropDown):
-	def __init__(self, screen_manager, **kwargs):
-		super(CustomDropDown2, self).__init__(**kwargs)
-		self.sm = screen_manager
-      
-	def on_select(self, data):
-		self.sm.button_text2 = data
+
 	
 #dropdown = CustomDropDown()
 #mainbutton = Button(text='Hello', size_hint=(None, None))
@@ -764,7 +566,7 @@ sm.add_widget(PowerScreen(name='power'))
 sm.add_widget(IssueScreen(name='report'))
 sm.add_widget(LanguagesScreen(name='langs'))
 sm.add_widget(CameraScreen(name='cam'))
-sm.add_widget(DownloadScreen(name='download'))
+
 
 
 class TestApp(App):
@@ -795,14 +597,6 @@ class TestApp(App):
 		server.sendmail('ccuser.reports@gmail.com', toaddr, text)
 		server.quit()
 		fob.close()
-		
-	def dlist(self):
-		file = open ('downloaded.txt', 'r')
-		i=0;
-		for line in file:
-			i= i+1;
-			x = line.split(',')
-			print(x[0], '\t')
 		
 		
 if __name__ == '__main__':
