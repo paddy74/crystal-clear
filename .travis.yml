@@ -1,13 +1,29 @@
 sudo: false
 
+env:
+  global:
+    secure: 1gWhNll6biYxVQZiz/yv+XxuLq90EfD+eFkksGTN2/MKe5brhZS9asusJ1DDEm4vZO9yKeC7m/q+VPnutWxzCpMB3/rEwIOs/ses3Mhx/z/P8wj2yb0fLyv3zSI+eEtwCG6Qr3aIG3rHY2LSs1G96qHnZiz17cJHVXhGn7DIT9JSEtmb+cDwS7006XgKY7q/GMLTsErr3BImZ8gJHaTxxhXttF1KA/FJunROQc3KRd0T8GVVO3off4o7Ln1h9mr4OFgtxu8pGHGK7iYTZWE+v54OBLfnCSEH/GgntpoPDsyyQgO1Xv92a3Vi3i803evHuVJ2ZUGfJ9n4O8B5oy6Un/OTKkrBWcP82wYa4/roq+GFYrP/JN3V1Lad+6ANseY46+D+JRIryEONYq7w4tSBsEdiy3EcEN5iluFGuNVGC2mI61MvzmH8kOuDWW576o2oZy5XdRgDyB95cwD/7uYmz+H0k1GPsrRqWaD49mGo6Q98uWTKB9K+WYPTPvRR/XDEwczLiPd4hFQu8Xm47zrBAfICUrCMY1fGblup6y7owTIZrGkQqZ9I6pWrJOjeDPvNH8YDO9IM4m60M7uOJIpaxlGQxcrSgDyTudtNkBzGxloSQ8MIws8vDqub0dqRPQsSayFDVpxLPF8AS1cXULkDB8Yt2DoQMsnHRkEC+dFt100=
+
 language: python
 
 python:
   - 3.6
 
+branches:
+  only:
+    - master
+
 cache: pip
+
 install:
+  - pip install coverage
+  - pip install codacy-coverage
   - pip install -r requirements.txt
 
 script:
   - python test.py
+
+after_success:
+  - coverage xml
+  - python-codacy-coverage -r coverage.xml
+
