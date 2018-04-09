@@ -14,6 +14,7 @@ import numpy as np
 import argparse
 import imutils
 import time
+from datetime import datetime
 import sqlite3
 from kivy.uix.textinput import TextInput
 import os
@@ -24,6 +25,7 @@ from email.mime.text import MIMEText
 from kivy.uix.boxlayout import BoxLayout
 import sys
 
+# Defines paths to file dependencies
 PATH_TO_OBJ_REC = './crystal-clear/object_detection/classify_image.py'
 PATH_TO_IMG = './crystal-clear/object_detection/tests/'
 IMG_NAME = 'IMG.jpg'
@@ -35,14 +37,13 @@ PATH_TO_DEFINITION = './crystal-clear/language_translation/data/spanish/definiti
 PATH_TO_USECASE = './crystal-clear/language_translation/data/spanish/use_case.pkl'
 PATH_TO_AUDIO = './crystal-clear/language_translation/data/spanish/audio.pkl'
 
+# Imports language translation functions
 sys.path.insert(0,PATH_TO_LANGFUNCTIONS)
 import language_translation
 
 Builder.load_string('''
 <MenuScreen>:
 	FloatLayout:
-	
-	
 		AnchorLayout:
 			anchor_x: 'right'
 			anchor_y: 'bottom'
@@ -64,6 +65,8 @@ Builder.load_string('''
 				size: 150, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.current = 'hist'
 		
 		AnchorLayout:
 			anchor_x:'center'
@@ -91,8 +94,6 @@ Builder.load_string('''
 					
 <CameraScreen>:
 	FloatLayout:
-	
-	
 		AnchorLayout:
 			anchor_x: 'left'
 			anchor_y: 'bottom'
@@ -151,8 +152,6 @@ Builder.load_string('''
 				
 		   
 <SettingsScreen>:
-	
-	
 	RelativeLayout:
 	
 		Label:
@@ -227,7 +226,8 @@ Builder.load_string('''
 				on_press: app.get_running_app().stop()
 				
 <HistoryScreen>:
-	RelativeLayout
+	
+	RelativeLayout:
 		Label:
 			text: 'History'
 			font_size: '26sp'
@@ -235,7 +235,12 @@ Builder.load_string('''
 			halign: 'center'
 			valign: 'top'
 			text_size: self.size
-				
+
+		Label:
+			text: root.dbContents
+			halign: 'left'
+			valign: 'bottom'
+			
 		AnchorLayout:
 			anchor_x: 'left'
 			anchor_y: 'top'
@@ -265,6 +270,28 @@ Builder.load_string('''
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press: app.get_running_app().stop()
+				
+		AnchorLayout:
+			anchor_x: 'right'
+			anchor_y: 'bottom'
+					
+			Button:
+				text: 'Clear History'
+				size: 120, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: root.clearHistory() 
+
+		AnchorLayout:
+			anchor_x: 'left'
+			anchor_y: 'bottom'
+					
+			Button:
+				text: 'Display History'
+				size: 150, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: root.displayContentsOfDB() 
 				
 		
 <LanguagesScreen>:
@@ -626,6 +653,31 @@ class SettingsScreen(Screen):
 	pass
 
 class HistoryScreen(Screen):
+	dbContents = StringProperty()
+	def clearHistory(self):
+		conn = sqlite3.connect('sqlitedb.db')
+		c = conn.cursor()
+		c.execute("delete from history")
+		conn.commit()
+		self.dbContents = "changed"
+		
+	def displayContentsOfDB(self):
+		conn = sqlite3.connect('sqlitedb.db')
+		c = conn.cursor()
+
+		# Do this instead
+		c.execute('SELECT * FROM history')
+		conn.commit()
+		contents = ""
+		for tuple in c.fetchall():
+			objectLabel = tuple[0]
+			confidenceLevel = tuple[1]
+			translatedWord = tuple[2]
+			timeStamp = datetime.fromtimestamp(tuple[3]).strftime("%A, %B %d, %Y %I:%M:%S")
+			contents += objectLabel + "  -  " + str(confidenceLevel) + "  -  " + translatedWord + "  -  " + str(timeStamp) + "\n"
+			self.dbContents = contents
+
+	
 	pass
 
 class LanguageScreen(Screen) :
@@ -664,13 +716,14 @@ class DownloadScreen(Screen) :
 	
 class CameraScreen(Screen):
 	objectLabel = StringProperty()
+	timeStamp = 0
 	def takePicture(self):
 		camera = self.ids['camera']
-		timestr = time.strftime("%Y%m%d_%H%M%S")
-		camera.export_to_png("crystal-clear/object_detection/tests/IMG.jpg")
+		self.timeStamp = time.time()
+		camera.export_to_png("crystal-clear/object_detection/tests/"+str(self.timeStamp)+".jpg")
 		return
 	def runScript(self):
-		os.system("python " + PATH_TO_OBJ_REC + " --image_file " + PATH_TO_IMG + IMG_NAME + " --model_dir " + PATH_TO_MODEL + " --num_top_predictions " + GUESS_COUNT)
+		os.system("python " + PATH_TO_OBJ_REC + " --image_file " + PATH_TO_IMG + str(self.timeStamp) + ".jpg " + " --model_dir " + PATH_TO_MODEL + " --num_top_predictions " + GUESS_COUNT)
 		return
 	def updateText(self):
 		file = open('output.txt')
@@ -688,12 +741,16 @@ class CameraScreen(Screen):
 			label = guess[0:separatorIndex]
 		else:
 			label = guess[0:firstDigitIndex-1]
+		# Retrieves confidence level
+		clevel = guess[firstDigitIndex:-1]
+		# Retrieves translated word
 		trans, data = temp.translate(label, True, False, False)
 		self.objectLabel = guess + "Translation of \'" + label + "\': " + str(trans) + "\nDefinition: " + str(data["definition"])
+		CameraScreen.insertObjectIntoHistoryDB(label,clevel,str(trans),self.timeStamp) 
 		return	
 		
 	#Function to insert data into the SQLITE database, history table 
-	#Takes parameters for the word, the confidence level, the native language, the translated language, and a time stamp
+	#Takes parameters for the word, the confidence level, and a time stamp
 	def insertObjectIntoHistoryDB(word, clevel, translatedWord, timeStamp):
 		#Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
@@ -726,6 +783,7 @@ class CameraScreen(Screen):
 		conn.close()
 
 		#End of function
+		return
 	pass
 	
 class CustomDropDown1(DropDown):
@@ -804,6 +862,22 @@ class TestApp(App):
 			x = line.split(',')
 			print(x[0], '\t')
 		
-		
 if __name__ == '__main__':
-    TestApp().run()
+	# Check for existing db
+	if os.path.isfile('./sqlitedb.db'):
+		print("\nDatabase already exists, skipping DB initialization\n")
+	else:
+		conn = sqlite3.connect('sqlitedb.db')
+
+		c = conn.cursor()
+		# Create table
+		c.execute('''CREATE TABLE history
+					 (word, clevel, translatedWord, timeStamp)''')
+
+		# Save (commit) the changes
+		conn.commit()
+
+		# We can also close the connection if we are done with it.
+		# Just be sure any changes have been committed or they will be lost.
+		conn.close()
+	TestApp().run()
