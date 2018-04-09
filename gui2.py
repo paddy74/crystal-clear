@@ -6,6 +6,7 @@ from kivy.graphics import Color, Rectangle
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
+from kivy.uix.image import Image
 from kivy.base import runTouchApp
 from imutils.video import VideoStream
 from imutils.video import FPS
@@ -226,8 +227,19 @@ Builder.load_string('''
 				on_press: app.get_running_app().stop()
 				
 <HistoryScreen>:
-	
+	on_enter: root.displayContentsOfDB()
 	RelativeLayout:
+		AnchorLayout:
+			anchor_x: 'right'
+			anchor_y: 'center'
+		
+			Button:
+				text: 'Image Display'
+				size: 150, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.current = 'imgdisp'
 		Label:
 			text: 'History'
 			font_size: '26sp'
@@ -282,18 +294,13 @@ Builder.load_string('''
 				opacity: 1 if self.state == 'normal' else .5
 				on_press: root.clearHistory() 
 
-		AnchorLayout:
-			anchor_x: 'left'
-			anchor_y: 'bottom'
-					
-			Button:
-				text: 'Display History'
-				size: 150, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: root.displayContentsOfDB() 
-				
-		
+<DisplayImageScreen>:
+	on_enter: root.load_content()
+    GridLayout:
+        cols: 2
+        # just add a id that can be accessed later on
+        id: content
+			
 <LanguagesScreen>:
 
 	RelativeLayout:
@@ -654,6 +661,8 @@ class SettingsScreen(Screen):
 
 class HistoryScreen(Screen):
 	dbContents = StringProperty()
+	# List of image filenames as timestamp in seconds
+	dbTimestamps = []
 	def clearHistory(self):
 		conn = sqlite3.connect('sqlitedb.db')
 		c = conn.cursor()
@@ -662,22 +671,38 @@ class HistoryScreen(Screen):
 		self.dbContents = "changed"
 		
 	def displayContentsOfDB(self):
+		self.dbContents = ""
+		self.dbTimestamps = []
 		conn = sqlite3.connect('sqlitedb.db')
 		c = conn.cursor()
 
 		# Do this instead
 		c.execute('SELECT * FROM history')
 		conn.commit()
-		contents = ""
 		for tuple in c.fetchall():
 			objectLabel = tuple[0]
 			confidenceLevel = tuple[1]
 			translatedWord = tuple[2]
+			self.dbTimestamps.append(tuple[3])
 			timeStamp = datetime.fromtimestamp(tuple[3]).strftime("%A, %B %d, %Y %I:%M:%S")
-			contents += objectLabel + "  -  " + str(confidenceLevel) + "  -  " + translatedWord + "  -  " + str(timeStamp) + "\n"
-			self.dbContents = contents
+			self.dbContents += objectLabel + "  -  " + str(confidenceLevel) + "  -  " + translatedWord + "  -  " + str(timeStamp) + "\n"
+	"""
+	def loadImages(self):
+		for filename in self.dbTimestamps:
+	"""	
+	pass
 
-	
+class DisplayImageScreen(Screen):
+	def load_content(self):
+		imageSource = Image(source = 'kivy.png')
+		imageButton = Button(background_normal = 'kivy.png')
+		self.add_widget(imageButton)
+		"""
+		for image in range(10):
+			imageSource = Image(source = 'kivy.png')
+			imageButton = Button()
+			self.ids.content.add_widget(imageButton)
+		"""
 	pass
 
 class LanguageScreen(Screen) :
@@ -806,7 +831,7 @@ class CustomDropDown2(DropDown):
 #mainbutton = Button(text='Hello', size_hint=(None, None))
 #mainbutton.bind(on_release=dropdown.open)
 #dropdown.bind(on_select=lambda instance, x: setattr(mainbutton, 'text', x))
-#sm.add_wdiget(MenuScreen(name=menu))	
+#sm.add_widget(MenuScreen(name=menu))	
 		
 sm = ScreenManager()
 
@@ -817,6 +842,7 @@ sm = ScreenManager()
 sm.add_widget(MenuScreen(name='menu'))
 sm.add_widget(SettingsScreen(name='settings'))
 sm.add_widget(HistoryScreen(name='hist'))
+sm.add_widget(DisplayImageScreen(name='imgdisp'))
 sm.add_widget(LanguageScreen(name='lang'))
 sm.add_widget(PowerScreen(name='power'))
 sm.add_widget(IssueScreen(name='report'))
