@@ -7,6 +7,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
 from kivy.uix.image import Image
+from kivy.uix.label import Label
 from kivy.base import runTouchApp
 from imutils.video import VideoStream
 from imutils.video import FPS
@@ -37,6 +38,7 @@ PATH_TO_TRANSLATION = './crystal-clear/language_translation/data/spanish/transla
 PATH_TO_DEFINITION = './crystal-clear/language_translation/data/spanish/definition.pkl'
 PATH_TO_USECASE = './crystal-clear/language_translation/data/spanish/use_case.pkl'
 PATH_TO_AUDIO = './crystal-clear/language_translation/data/spanish/audio.pkl'
+chosenPictureInHistory = ""
 
 # Imports language translation functions
 sys.path.insert(0,PATH_TO_LANGFUNCTIONS)
@@ -295,12 +297,71 @@ Builder.load_string('''
 				on_press: root.clearHistory() 
 
 <DisplayImageScreen>:
-	on_enter: root.load_content()
-    GridLayout:
-        cols: 2
-        # just add a id that can be accessed later on
-        id: content
+	on_enter: root.clearGrid(), root.load_content()
+	FloatLayout:
+	
+		AnchorLayout:
+			anchor_x: 'left'
+			anchor_y: 'top'
 			
+			Button:
+				text: '<='
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'menu'
+				Image:
+					source: 'kivy.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+		
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'center'
+				
+			GridLayout:   
+				cols: 2
+				# just add a id that can be accessed later on
+				id: content
+
+<ImageScreen>:
+	on_enter: root.setPicture()
+	FloatLayout:
+	
+	AnchorLayout:
+		anchor_x: 'center'
+		anchor_y: 'top'
+		
+		Label:
+			text: root.objectInformation
+			size: 300, 60
+			size_hint: None, None
+
+	AnchorLayout:
+		anchor_x: 'left'
+		anchor_y: 'top'
+		
+		Button:
+			text: '<='
+			size: 90, 60
+			size_hint: None, None
+			opacity: 1 if self.state == 'normal' else .5
+			on_press:
+				root.manager.transition.direction = 'right'
+				root.manager.current = 'imgdisp'
+			Image:
+				source: 'kivy.png'
+				y: self.parent.y
+				x: self.parent.x
+				size: 90, 60
+				#allow_stretch: True
+				
+	
+	
 <LanguagesScreen>:
 
 	RelativeLayout:
@@ -669,6 +730,7 @@ class HistoryScreen(Screen):
 		c.execute("delete from history")
 		conn.commit()
 		self.dbContents = "changed"
+		conn.close()
 		
 	def displayContentsOfDB(self):
 		self.dbContents = ""
@@ -678,7 +740,7 @@ class HistoryScreen(Screen):
 
 		# Do this instead
 		c.execute('SELECT * FROM history')
-		conn.commit()
+		
 		for tuple in c.fetchall():
 			objectLabel = tuple[0]
 			confidenceLevel = tuple[1]
@@ -686,23 +748,198 @@ class HistoryScreen(Screen):
 			self.dbTimestamps.append(tuple[3])
 			timeStamp = datetime.fromtimestamp(tuple[3]).strftime("%A, %B %d, %Y %I:%M:%S")
 			self.dbContents += objectLabel + "  -  " + str(confidenceLevel) + "  -  " + translatedWord + "  -  " + str(timeStamp) + "\n"
-	"""
-	def loadImages(self):
-		for filename in self.dbTimestamps:
-	"""	
+		conn.close()
+	pass
+
+class ImageScreen(Screen):	
+	objectInformation = StringProperty()
+	word = 0.0
+	clevel = 0.0
+	translatedWord = ""
+	timeStamp = 0.0
+	
+	def setPicture(self):
+		conn = sqlite3.connect('sqlitedb.db')
+		c = conn.cursor()
+		c.execute("select * from currentImage")
+		
+		for tuple in c.fetchall():
+			self.timeStamp = tuple[0]
+			#print("DEBUG: " + str(self.word))
+		
+		conn.commit()
+		
+		c.execute("select * from history where timeStamp = ?", (self.timeStamp,))
+		
+		for tuple in c.fetchall():
+			self.word = tuple[0]
+			self.clevel = tuple[1]
+			self.translatedWord = tuple[2]
+			self.timeStamp = tuple[3]
+		
+		imageValue = str(self.timeStamp) + ".jpg"
+		print (imageValue)
+		#imageValue = "1523238490.2973714.jpg"
+		wimg = Image(source = PATH_TO_IMG + imageValue)
+		self.add_widget(wimg)
+		#l = Label(text= '[color=ff3333]' + self.word + ' [/color][color=3333ff]' + self.clevel + '[/color]', markup = True, halign = center, valign = top)
+		#informationLabel = Label(text = "test")
+		#informationLabel.halign = 'center'
+		#informationLabel.valign = 'top'
+		#informationLabel.text_size = 'self.size'
+		#self.add_widget(informationLabel)
+		self.objectInformation = "test"
 	pass
 
 class DisplayImageScreen(Screen):
+	pictureID = ""
+	pictureID0 = ""
+	pictureID1 = ""
+	pictureID2 = ""
+	pictureID3 = ""
+	pictureID4 = ""
+	pictureID5 = ""
+	pictureID6 = ""
+	pictureID7 = ""
+	pictureID8 = ""
+	pictureID9 = ""
+		
+	def selectedImage(self):
+		conn = sqlite3.connect('sqlitedb.db')
+		c = conn.cursor()
+		c.execute("delete from currentImage")
+		print ("DEBUG: " + self.pictureID)
+		c.execute("insert into currentImage (timeStamp) values (?)", (self.pictureID,))
+		conn.commit()
+		conn.close()
+		return 
+	
+	def clearGrid(self):
+		self.ids.content.clear_widgets()
+		return
+	
+	def returnPictureID(self):
+		return self.pictureID
+	
+	def viewImage0(self):
+		self.pictureID = self.pictureID0
+		self.selectedImage
+		sm.current = 'img'
+		return
+	
+	def viewImage1(self):
+		self.pictureID = self.pictureID1
+		self.selectedImage
+		sm.current = 'img'
+		return 
+		
+	def viewImage2(self):
+		self.pictureID = self.pictureID2
+		self.selectedImage
+		sm.current = 'img'
+		return 
+		
+	def viewImage3(self):
+		self.pictureID = self.pictureID3
+		self.selectedImage
+		sm.current = 'img'
+		return 
+		
+	def viewImage4(self):
+		self.pictureID = self.pictureID4
+		self.selectedImage
+		sm.current = 'img'
+		return 
+		
+	def viewImage5(self):
+		self.pictureID = self.pictureID5
+		self.selectedImage
+		sm.current = 'img'
+		return 
+		
+	def viewImage6(self):
+		self.pictureID = self.pictureID6
+		self.selectedImage
+		sm.current = 'img'
+		return 
+		
+	def viewImage7(self):
+		self.pictureID = self.pictureID7
+		self.selectedImage
+		sm.current = 'img'
+		return 
+
+	def viewImage8(self):
+		self.pictureID = self.pictureID8
+		self.selectedImage
+		sm.current = 'img'
+		return
+		
+	def viewImage9(self):
+		self.pictureID = self.pictureID9
+		self.selectedImage
+		sm.current = 'img'
+		return
+		
 	def load_content(self):
-		imageSource = Image(source = 'kivy.png')
-		imageButton = Button(background_normal = 'kivy.png')
-		self.add_widget(imageButton)
-		"""
-		for image in range(10):
-			imageSource = Image(source = 'kivy.png')
-			imageButton = Button()
+		imageIndex = 0
+		conn = sqlite3.connect('sqlitedb.db')
+		c = conn.cursor()
+		c.execute('SELECT timeStamp FROM history')
+		all_rows = c.fetchall()
+		result = []
+		result = [object[0] for object in all_rows]
+
+		for image in result:
+			imageSource = PATH_TO_IMG + str(image) + ".jpg" 
+			print ("debug code: " + imageSource)
+			imageButton = Button(background_normal = imageSource)
+			
+			if imageIndex == 0:
+				imageButton.on_press = self.viewImage0
+				self.pictureID0 = str(image)
+				
+			elif imageIndex == 1:
+				imageButton.on_press = self.viewImage1
+				self.pictureID1 = str(image)
+	
+			elif imageIndex == 2:
+				imageButton.on_press = self.viewImage2
+				self.pictureID2 = str(image)
+
+			elif imageIndex == 3:
+				imageButton.on_press = self.viewImage3
+				self.pictureID3 = str(image)
+
+			elif imageIndex == 4:
+				imageButton.on_press = self.viewImage4
+				self.pictureID4 = str(image)
+
+			elif imageIndex == 5:
+				imageButton.on_press = self.viewImage5
+				self.pictureID5 = str(image)
+
+			elif imageIndex == 6:
+				imageButton.on_press = self.viewImage6
+				self.pictureID6 = str(image)
+
+			elif imageIndex == 7:
+				imageButton.on_press = self.viewImage7
+				self.pictureID7 = str(image)
+			
+			elif imageIndex == 8:
+				imageButton.on_press = self.viewImage8
+				self.pictureID8 = str(image)
+				
+			elif imageIndex == 9:
+				imageButton.on_press = self.viewImage9
+				self.pictureID9 = str(image)
+			
 			self.ids.content.add_widget(imageButton)
-		"""
+			imageIndex += 1
+		conn.close()
+		return 
+	
 	pass
 
 class LanguageScreen(Screen) :
@@ -849,6 +1086,7 @@ sm.add_widget(IssueScreen(name='report'))
 sm.add_widget(LanguagesScreen(name='langs'))
 sm.add_widget(CameraScreen(name='cam'))
 sm.add_widget(DownloadScreen(name='download'))
+sm.add_widget(ImageScreen(name='img'))
 
 
 class TestApp(App):
@@ -893,6 +1131,7 @@ if __name__ == '__main__':
 	if os.path.isfile('./sqlitedb.db'):
 		print("\nDatabase already exists, skipping DB initialization\n")
 	else:
+	
 		conn = sqlite3.connect('sqlitedb.db')
 
 		c = conn.cursor()
@@ -900,6 +1139,8 @@ if __name__ == '__main__':
 		c.execute('''CREATE TABLE history
 					 (word, clevel, translatedWord, timeStamp)''')
 
+		c.execute('''CREATE TABLE currentImage (timeStamp)''')
+		
 		# Save (commit) the changes
 		conn.commit()
 
