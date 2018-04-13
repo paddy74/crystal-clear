@@ -300,9 +300,7 @@ Builder.load_string('''
 	on_enter: root.clearGrid(), root.load_content()
 	FloatLayout:
 	
-		AnchorLayout:
-			anchor_x: 'left'
-			anchor_y: 'top'
+		BoxLayout:
 			
 			Button:
 				text: '<='
@@ -318,15 +316,18 @@ Builder.load_string('''
 					x: self.parent.x
 					size: 90, 60
 					#allow_stretch: True
-		
-		AnchorLayout:
-			anchor_x: 'center'
-			anchor_y: 'center'
 				
 			GridLayout:   
 				cols: 2
 				# just add a id that can be accessed later on
 				id: content
+				
+#Delete button				
+			Button:
+				text: 'Clear History'
+				size: 110, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
 
 <ImageScreen>:
 	on_enter: root.setPicture()
@@ -359,9 +360,18 @@ Builder.load_string('''
 				x: self.parent.x
 				size: 90, 60
 				#allow_stretch: True
+	AnchorLayout:
+		anchor_x: 'right'
+		anchor_y: 'top'
+		
+			#Delete button				
+		Button:
+			text: 'Delete from History'
+			size: 150, 60
+			size_hint: None, None
+			opacity: 1 if self.state == 'normal' else .5
+			on_press: deleteObject()
 				
-	
-	
 <LanguagesScreen>:
 
 	RelativeLayout:
@@ -735,12 +745,13 @@ class HistoryScreen(Screen):
 	def displayContentsOfDB(self):
 		self.dbContents = ""
 		self.dbTimestamps = []
+		#Connect to DB 
 		conn = sqlite3.connect('sqlitedb.db')
+		#Cursor for DB object 
 		c = conn.cursor()
-
-		# Do this instead
+		#Get all contents of DB 
 		c.execute('SELECT * FROM history')
-		
+		#
 		for tuple in c.fetchall():
 			objectLabel = tuple[0]
 			confidenceLevel = tuple[1]
@@ -751,145 +762,160 @@ class HistoryScreen(Screen):
 		conn.close()
 	pass
 
-class ImageScreen(Screen):	
+class ImageScreen(Screen):
+	#Variable to hold information in label 
 	objectInformation = StringProperty()
-	word = 0.0
+	#Values to be set on db query 
+	word = ""
 	clevel = 0.0
 	translatedWord = ""
 	timeStamp = 0.0
-	
-	def setPicture(self):
+		
+	#Function to delete an object from db as well as the .jpg file associated with that image 
+	def deleteObject(self):
+		#Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
+		#Cursor for DB object
+		c = conn.cursor()
+		#Delete row from table history for object currently being viewed 
+		c.execute('delete from history where timeStamp = ?', (float(self.timeStamp),))
+		#commit the changes to the db 
+		conn.commit()
+		#close the connection to the db
+		conn.close()
+		#remove the image associated with the object being viewed from the image storage folder 
+		os.remove(PATH_TO_IMG + str(self.timeStamp) + ".jpg")
+		return 
+
+	def setPicture(self):
+		#Connect to DB
+		conn = sqlite3.connect('sqlitedb.db')
+		#Cursor for DB object
 		c = conn.cursor()
 		c.execute("select * from currentImage")
-		
-		for tuple in c.fetchall():
-			self.timeStamp = tuple[0]
-			#print("DEBUG: " + str(self.word))
-		
+		c.execute('select h.word, h.clevel, h.translatedWord, h.timeStamp from history h, currentImage c where h.timeStamp = c.tStamp')
 		conn.commit()
-		
-		c.execute("select * from history where timeStamp = ?", (self.timeStamp,))
-		
-		for tuple in c.fetchall():
-			self.word = tuple[0]
-			self.clevel = tuple[1]
-			self.translatedWord = tuple[2]
-			self.timeStamp = tuple[3]
-		
+		for tuple2 in c.fetchall():
+			self.word = tuple2[0]
+			self.clevel = tuple2[1]
+			self.translatedWord = tuple2[2]
+			self.timeStamp = tuple2[3]
+		print("DEBUG word display: " + self.word)
 		imageValue = str(self.timeStamp) + ".jpg"
 		print (imageValue)
-		#imageValue = "1523238490.2973714.jpg"
 		wimg = Image(source = PATH_TO_IMG + imageValue)
 		self.add_widget(wimg)
-		#l = Label(text= '[color=ff3333]' + self.word + ' [/color][color=3333ff]' + self.clevel + '[/color]', markup = True, halign = center, valign = top)
-		#informationLabel = Label(text = "test")
-		#informationLabel.halign = 'center'
-		#informationLabel.valign = 'top'
-		#informationLabel.text_size = 'self.size'
-		#self.add_widget(informationLabel)
-		self.objectInformation = "test"
+		return 
 	pass
 
 class DisplayImageScreen(Screen):
-	pictureID = ""
-	pictureID0 = ""
-	pictureID1 = ""
-	pictureID2 = ""
-	pictureID3 = ""
-	pictureID4 = ""
-	pictureID5 = ""
-	pictureID6 = ""
-	pictureID7 = ""
-	pictureID8 = ""
-	pictureID9 = ""
+	#Variable to hold main ID(time stamp) that will be insert into the currentImage table 
+	pictureID = 0.0
+	#Variables to hold the ID(time stamp) for each button
+	pictureID0 = 0.0
+	pictureID1 = 0.0
+	pictureID2 = 0.0
+	pictureID3 = 0.0
+	pictureID4 = 0.0
+	pictureID5 = 0.0
+	pictureID6 = 0.0
+	pictureID7 = 0.0
+	pictureID8 = 0.0
+	pictureID9 = 0.0
 		
-	def selectedImage(self):
+	def selectImage(self):
+		#Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
+		#Cursor for DB object 
 		c = conn.cursor()
+		#Delete contents of table currentImage
 		c.execute("delete from currentImage")
-		print ("DEBUG: " + self.pictureID)
-		c.execute("insert into currentImage (timeStamp) values (?)", (self.pictureID,))
+		#Insert selected picture time stamp into currentImage table
+		c.execute("insert into currentImage (tStamp) values (?)", (float(self.pictureID),))
+		#Commit changes 
 		conn.commit()
+		#Close connection to DB 
 		conn.close()
 		return 
-	
+	#Function to clear all widgets attached to grid layout 
 	def clearGrid(self):
 		self.ids.content.clear_widgets()
 		return
-	
-	def returnPictureID(self):
-		return self.pictureID
-	
+	#Function to change to ImageScreen and load first image in grid layout to that screen 
 	def viewImage0(self):
 		self.pictureID = self.pictureID0
-		self.selectedImage
+		self.selectImage()
 		sm.current = 'img'
 		return
-	
+	#Function to change to ImageScreen and load second image in grid layout to that screen
 	def viewImage1(self):
 		self.pictureID = self.pictureID1
-		self.selectedImage
+		self.selectImage()
 		sm.current = 'img'
 		return 
-		
+	#Function to change to ImageScreen and load third image in grid layout to that screen	
 	def viewImage2(self):
 		self.pictureID = self.pictureID2
-		self.selectedImage
+		self.selectImage()
 		sm.current = 'img'
 		return 
-		
+	#Function to change to ImageScreen and load fourth image in grid layout to that screen	
 	def viewImage3(self):
 		self.pictureID = self.pictureID3
-		self.selectedImage
+		self.selectImage()
 		sm.current = 'img'
 		return 
-		
+	#Function to change to ImageScreen and load fifth image in grid layout to that screen	
 	def viewImage4(self):
 		self.pictureID = self.pictureID4
-		self.selectedImage
+		self.selectImage()
 		sm.current = 'img'
 		return 
-		
+	#Function to change to ImageScreen and load sixth image in grid layout to that screen	
 	def viewImage5(self):
 		self.pictureID = self.pictureID5
-		self.selectedImage
+		self.selectImage()
 		sm.current = 'img'
 		return 
-		
+	#Function to change to ImageScreen and load seventh image in grid layout to that screen	
 	def viewImage6(self):
 		self.pictureID = self.pictureID6
-		self.selectedImage
+		self.selectImage()
 		sm.current = 'img'
 		return 
-		
+	#Function to change to ImageScreen and load eighth image in grid layout to that screen	
 	def viewImage7(self):
 		self.pictureID = self.pictureID7
-		self.selectedImage
+		self.selectImage()
 		sm.current = 'img'
 		return 
-
+	#Function to change to ImageScreen and load ninth image in grid layout to that screen
 	def viewImage8(self):
 		self.pictureID = self.pictureID8
-		self.selectedImage
+		self.selectImage()
 		sm.current = 'img'
 		return
-		
+	#Function to change to ImageScreen and load tenth image in grid layout to that screen	
 	def viewImage9(self):
 		self.pictureID = self.pictureID9
-		self.selectedImage
+		self.selectImage()
 		sm.current = 'img'
 		return
-		
+	#Function to load images as buttons into the grid layout
 	def load_content(self):
 		imageIndex = 0
+		#Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
+		#Cursor for DB object 
 		c = conn.cursor()
+		#Get all time stamps from history table 
 		c.execute('SELECT timeStamp FROM history')
+		#Put all data fetched into python variable 
 		all_rows = c.fetchall()
 		result = []
+		#Fill result array with time stamps fetched from history table 
 		result = [object[0] for object in all_rows]
-
+		#Iterate through result, assign each image to a button, add corresponding function to each button, add each button to grid layout 
 		for image in result:
 			imageSource = PATH_TO_IMG + str(image) + ".jpg" 
 			print ("debug code: " + imageSource)
@@ -897,49 +923,66 @@ class DisplayImageScreen(Screen):
 			
 			if imageIndex == 0:
 				imageButton.on_press = self.viewImage0
-				self.pictureID0 = str(image)
+				self.pictureID0 = image
 				
 			elif imageIndex == 1:
 				imageButton.on_press = self.viewImage1
-				self.pictureID1 = str(image)
+				self.pictureID1 = image
 	
 			elif imageIndex == 2:
 				imageButton.on_press = self.viewImage2
-				self.pictureID2 = str(image)
+				self.pictureID2 = image
 
 			elif imageIndex == 3:
 				imageButton.on_press = self.viewImage3
-				self.pictureID3 = str(image)
+				self.pictureID3 = image
 
 			elif imageIndex == 4:
 				imageButton.on_press = self.viewImage4
-				self.pictureID4 = str(image)
+				self.pictureID4 = image
 
 			elif imageIndex == 5:
 				imageButton.on_press = self.viewImage5
-				self.pictureID5 = str(image)
+				self.pictureID5 = image
 
 			elif imageIndex == 6:
 				imageButton.on_press = self.viewImage6
-				self.pictureID6 = str(image)
-
+				self.pictureID6 = image
+			
 			elif imageIndex == 7:
 				imageButton.on_press = self.viewImage7
-				self.pictureID7 = str(image)
+				self.pictureID7 = image
 			
 			elif imageIndex == 8:
 				imageButton.on_press = self.viewImage8
-				self.pictureID8 = str(image)
+				self.pictureID8 = image
 				
 			elif imageIndex == 9:
 				imageButton.on_press = self.viewImage9
-				self.pictureID9 = str(image)
+				self.pictureID9 = image
 			
 			self.ids.content.add_widget(imageButton)
 			imageIndex += 1
 		conn.close()
 		return 
-	
+	#Function to delete history from the DB and the stored images 
+	def deleteHistory(self):		
+		#Connect to DB
+		conn = sqlite3.connect('sqlitedb.db')
+		#Cursor for DB object
+		c = conn.cursor()
+		#Delete all contents of history table from db 
+		c.execute('delete from history')
+		#Commit changes to DB 
+		conn.commit()
+		#Close connection to DB
+		conn.close()
+		#Fill fileList with all file names in image directory 
+		fileList = os.listdir(PATH_TO_IMG)
+		#Iterate through each file name and delete it from the directory 
+		for fileName in fileList:
+			os.remove(PATH_TO_IMG+fileName)
+		return
 	pass
 
 class LanguageScreen(Screen) :
@@ -1016,34 +1059,24 @@ class CameraScreen(Screen):
 	def insertObjectIntoHistoryDB(word, clevel, translatedWord, timeStamp):
 		#Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
-
 		#Cursor for DB object
 		c = conn.cursor()
-
 		#Get number of objects in DB
 		c.execute("select count(*) from history")
-
 		#Object to hold first tuple in DB
 		all_rows = c.fetchone()
-
 		#Object to hold first element in first tuple which is the count of the number of objects
 		numOfObjects = all_rows[0]
-
 		#Check if there are more than 10 objects in the DB
 		if numOfObjects > 10:
-			
 			#Delete oldest object if there are more than 10
 			c.execute("delete from history where timeStamp IN (select MIN(timeStamp) from history)")
-
 		#Insert New object into DB
 		c.execute("insert into history (word, clevel, translatedWord, timeStamp) values (?,?,?,?)", (word, clevel, translatedWord, timeStamp))
-
 		#Save (commit) the changes
 		conn.commit()
-
 		#Close the connection
 		conn.close()
-
 		#End of function
 		return
 	pass
@@ -1131,20 +1164,19 @@ if __name__ == '__main__':
 	if os.path.isfile('./sqlitedb.db'):
 		print("\nDatabase already exists, skipping DB initialization\n")
 	else:
-	
+		#Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
-
+		#Cursor for database object 
 		c = conn.cursor()
-		# Create table
+		#Create history table that will store the word in english, the confidence level, the translated word in spanish, and a timestamp  
 		c.execute('''CREATE TABLE history
-					 (word, clevel, translatedWord, timeStamp)''')
-
-		c.execute('''CREATE TABLE currentImage (timeStamp)''')
+					 (word varchar(25) NOT NULL, clevel int NOT NULL, translatedWord varchar(25) NOT NULL, timeStamp int PRIMARY KEY NOT NULL)''')
 		
-		# Save (commit) the changes
+		#Create currentImage table to store the current image being accessed in history screen 
+		c.execute('''CREATE TABLE currentImage (tStamp int PRIMARY KEY NOT NULL)''')
+		
+		#Commit the changes
 		conn.commit()
-
-		# We can also close the connection if we are done with it.
-		# Just be sure any changes have been committed or they will be lost.
+		#Close connection 
 		conn.close()
 	TestApp().run()
