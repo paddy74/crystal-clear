@@ -986,7 +986,7 @@ class CameraScreen(Screen):
 		#Object to hold first element in first tuple which is the count of the number of objects
 		numOfObjects = all_rows[0]
 		#Check if there are more than 10 objects in the DB
-		if numOfObjects > 10:
+		if numOfObjects > 9:
 			#Delete oldest object if there are more than 10
 			c.execute("delete from history where timeStamp IN (select MIN(timeStamp) from history)")
 		#Insert New object into DB
