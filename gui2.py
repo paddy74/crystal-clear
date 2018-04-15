@@ -26,6 +26,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from kivy.uix.boxlayout import BoxLayout
 import sys
+from kivy.uix.popup import Popup
 
 # Defines paths to file dependencies
 PATH_TO_OBJ_REC = './crystal-clear/object_detection/classify_image.py'
@@ -107,7 +108,7 @@ Builder.load_string('''
 				on_press:
 					root.manager.transition.direction = 'right'
 					root.manager.current = 'menu'
-			    Image:
+				Image:
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
@@ -208,7 +209,7 @@ Builder.load_string('''
 				on_press:
 					root.manager.transition.direction = 'right'
 					root.manager.current = 'menu'
-			    Image:
+				Image:
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
@@ -247,7 +248,7 @@ Builder.load_string('''
 					size: 90, 60
 					#allow_stretch: True
 				
-			GridLayout:   
+			GridLayout:	  
 				cols: 2
 				# just add a id that can be accessed later on
 				id: content
@@ -369,7 +370,7 @@ Builder.load_string('''
 				on_press:
 					root.manager.transition.direction = 'right'
 					root.manager.current = 'settings'
-			    Image:
+				Image:
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
@@ -387,61 +388,64 @@ Builder.load_string('''
 				opacity: 1 if self.state == 'normal' else .5
 				on_press: app.get_running_app().stop()
 <CustomDropDown1>:
-    padding: [0,0,0,0]
-    Button:
-        text: 'English'
-        size:(200,50)
-        size_hint:(None,None)
-        text_size: self.size
-        valign: 'center'
-        padding: (10,0)
-        on_release: root.select(self.text)
-    Button:
-        text: 'Spanish'
-        size:(200,50)
-        size_hint:(None,None)
-        text_size: self.size
-        valign: 'center'
-        padding: (10,0)
-        on_release: root.select(self.text)
-    Button:
-        text: 'Pig Latin'
-        size:(200,50)
-        size_hint:(None,None)
-        text_size: self.size
-        valign: 'center'
-        padding: (10,0)
-        on_release: root.select(self.text)
+	padding: [0,0,0,0]
+	Button:
+		text: 'English'
+		size:(200,50)
+		size_hint:(None,None)
+		text_size: self.size
+		valign: 'center'
+		padding: (10,0)
+		on_release: root.select(self.text)
+	Button:
+		text: 'Spanish'
+		size:(200,50)
+		size_hint:(None,None)
+		text_size: self.size
+		valign: 'center'
+		padding: (10,0)
+		on_release: root.select(self.text)
+	Button:
+		text: 'Pig Latin'
+		size:(200,50)
+		size_hint:(None,None)
+		text_size: self.size
+		valign: 'center'
+		padding: (10,0)
+		on_release: root.select(self.text)
 		
 <CustomDropDown2>:
-    padding: [0,0,0,0]
-    Button:
-        text: 'English'
-        size:(200,50)
-        size_hint:(None,None)
-        text_size: self.size
-        valign: 'center'
-        padding: (10,0)
-        on_release: root.select(self.text)
-    Button:
-        text: 'Spanish'
-        size:(200,50)
-        size_hint:(None,None)
-        text_size: self.size
-        valign: 'center'
-        padding: (10,0)
-        on_release: root.select(self.text)
-    Button:
-        text: 'Pig Latin'
-        size:(200,50)
-        size_hint:(None,None)
-        text_size: self.size
-        valign: 'center'
-        padding: (10,0)
-        on_release: root.select(self.text)
+	padding: [0,0,0,0]
+	Button:
+		text: 'English'
+		size:(200,50)
+		size_hint:(None,None)
+		text_size: self.size
+		valign: 'center'
+		padding: (10,0)
+		on_release: root.select(self.text)
+	Button:
+		text: 'Spanish'
+		size:(200,50)
+		size_hint:(None,None)
+		text_size: self.size
+		valign: 'center'
+		padding: (10,0)
+		on_release: root.select(self.text)
+	Button:
+		text: 'Pig Latin'
+		size:(200,50)
+		size_hint:(None,None)
+		text_size: self.size
+		valign: 'center'
+		padding: (10,0)
+		on_release: root.select(self.text)
 				
 <PowerScreen>:
 
+
+	on_enter: root.start()
+	
 	RelativeLayout:
 	
 		Label:
@@ -453,18 +457,24 @@ Builder.load_string('''
 			text_size: self.size
 			
 		Button:
+			id: lp
+			background_normal: ''
 			text: 'Low Power Mode'
 			size: 150, 60
 			size_hint: None, None
 			pos: root.width/2 - self.width/2, root.height - 6 * self.height
 			opacity: 1 if self.state == 'normal' else .5
+			on_release: root.loww()
 				
 		Button:
+			id: hp
+			background_normal: ''
 			text: 'High Power Mode'
 			size: 150, 60
 			size_hint: None, None
 			pos: root.width/2 - self.width/2, root.height - 4 * self.height
 			opacity: 1 if self.state == 'normal' else .5
+			on_release: root.highh()
 
 			
 		AnchorLayout:
@@ -479,7 +489,7 @@ Builder.load_string('''
 				on_press:
 					root.manager.transition.direction = 'right'
 					root.manager.current = 'settings'
-			    Image:
+				Image:
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
@@ -495,7 +505,7 @@ Builder.load_string('''
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press: app.get_running_app().stop()
-
+				
 <DownloadScreen>:
 
 	RelativeLayout:
@@ -548,7 +558,7 @@ Builder.load_string('''
 				on_press:
 					root.manager.transition.direction = 'right'
 					root.manager.current = 'settings'
-			    Image:
+				Image:
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
@@ -559,7 +569,7 @@ Builder.load_string('''
 			size: 80, 60
 			size_hint: None, None
 			opacity: 1 if self.state == 'normal' else .5
-			on_release: app.dlist(self)
+#			on_release: app.dlist(self)
 
 <IssueScreen>:
 	email: email_in
@@ -605,7 +615,7 @@ Builder.load_string('''
 				on_press:
 					root.manager.transition.direction = 'right'
 					root.manager.current = 'settings'
-			    Image:
+				Image:
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
@@ -923,7 +933,43 @@ class LanguagesScreen(Screen) :
 	pass	
 	
 class PowerScreen(Screen) :
-	pass
+	pressed = True
+	np = False
+
+	def start(self):
+		self.pressed = True
+		self.np = False
+		self.ids.hp.background_color = 1, .3, .4, .85
+		self.ids.lp.background_color = .18, .843, .227, 1
+
+	def highh(self):
+		if not self.np:
+			self.ids.hp.background_color = 0.18, 0.843, 0.227, 1
+			self.ids.lp.background_color = 1, .3, .4, .85
+			self.np = True
+			self.pressed = False
+			pop = Popup(title='', content=Label(text='High Power Mode activated'), size_hint=(.5, .5))
+			pop.open()
+		elif self.np:
+			#	background_color: 1, .3, .4, .85
+			# self.np = True
+			# self.pressed = False
+			poppp = Popup(title='', content=Label(text='High Power mode already on'), size_hint=(.5, .5))
+			poppp.open()
+
+	def loww(self):
+		if self.pressed:
+			# self.pressed = True
+			# self.np = False
+			popp = Popup(title='', content=Label(text='Low Power mode already on'), size_hint=(.5, .5))
+			popp.open()
+		elif not self.pressed:
+			self.ids.lp.background_color = 0.18, 0.843, 0.227, 1
+			self.ids.hp.background_color = 1, .3, .4, .85
+			self.pressed = True
+			self.np = False
+			poppi = Popup(title='', content=Label(text='Low Power Mode Activated'), size_hint=(.5, .5))
+			poppi.open()
 	
 class IssueScreen(Screen) :
 	pass
@@ -1003,7 +1049,7 @@ class CustomDropDown1(DropDown):
 	def __init__(self, screen_manager, **kwargs):
 		super(CustomDropDown1, self).__init__(**kwargs)
 		self.sm = screen_manager
-      
+	  
 	def on_select(self, data):
 		self.sm.button_text = data
 		
@@ -1011,7 +1057,7 @@ class CustomDropDown2(DropDown):
 	def __init__(self, screen_manager, **kwargs):
 		super(CustomDropDown2, self).__init__(**kwargs)
 		self.sm = screen_manager
-      
+	  
 	def on_select(self, data):
 		self.sm.button_text2 = data
 	
@@ -1053,7 +1099,7 @@ class TestApp(App):
 		msg = MIMEMultipart()
 		msg['From'] = fromaddr
 		msg['To'] = toaddr
-		msg['Subject'] = 'From: ' + email + '   Issue: ' + sub
+		msg['Subject'] = 'From: ' + email + '	Issue: ' + sub
 		
 		body = rep
 		
