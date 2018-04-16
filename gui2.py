@@ -271,6 +271,16 @@ Builder.load_string('''
 	
 	AnchorLayout:
 		anchor_x: 'center'
+		anchor_y: 'bottom'			
+		Image:
+			source: ""
+			y: self.parent.y
+			x: self.parent.x
+			size: 150, 60
+			id: image
+	
+	AnchorLayout:
+		anchor_x: 'center'
 		anchor_y: 'top'
 		
 		Label:
@@ -308,7 +318,9 @@ Builder.load_string('''
 			opacity: 1 if self.state == 'normal' else .5
 			on_press: 
 				root.deleteObject() 
-				root.manager.current = 'hist'				
+				root.manager.current = 'hist'	
+
+					
 				
 <LanguagesScreen>:
 
@@ -898,9 +910,10 @@ class ImageScreen(Screen):
 			self.definition = tuple2[4]
 		print("DEBUG word display: " + self.word)
 		imageValue = str(self.timeStamp) + ".jpg"
-		print (imageValue)
-		wimg = Image(source = PATH_TO_IMG + imageValue)
-		self.add_widget(wimg)
+		#print (imageValue)
+		#wimg = Image(source = PATH_TO_IMG + imageValue)
+		#self.add_widget(wimg)
+		self.ids.image.source = PATH_TO_IMG + imageValue
 		#self.objectInformation = "test"
 		self.objectInformation = self.word + "\nTranslation of \'" + self.word + "\': " + self.translatedWord + "\nDefinition: " + str(self.definition)
 		return 
