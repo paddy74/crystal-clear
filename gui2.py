@@ -267,7 +267,7 @@ Builder.load_string('''
 
 <ImageScreen>:
 	on_enter: root.setPicture()
-	FloatLayout:
+	AnchorLayout:
 	
 	AnchorLayout:
 		anchor_x: 'center'
@@ -309,14 +309,6 @@ Builder.load_string('''
 			on_press: 
 				root.deleteObject() 
 				root.manager.current = 'hist'				
-	AnchorLayout:
-		anchor_x: 'center'
-		anchor_y: 'top'
-
-		Label:
-			text: root.label
-			size: 300, 60
-			size_hint: None, None
 				
 <LanguagesScreen>:
 
@@ -870,7 +862,6 @@ class ImageScreen(Screen):
 	clevel = 0.0
 	translatedWord = ""
 	timeStamp = 0.0
-	label = ""
 	definition = ""
 		
 	#Function to delete an object from db as well as the .jpg file associated with that image 
@@ -896,21 +887,22 @@ class ImageScreen(Screen):
 		#Cursor for DB object
 		c = conn.cursor()
 		c.execute("select * from currentImage")
-		c.execute('select h.word, h.clevel, h.translatedWord, h.timeStamp from history h, currentImage c where h.timeStamp = c.tStamp')
-		conn.commit()
+		#c.execute('select h.word, h.clevel, h.translatedWord, h.timeStamp from history h, currentImage c where h.timeStamp = c.tStamp')
+		c.execute('select h.word, h.clevel, h.translatedWord, h.timeStamp, t.definition from history h LEFT JOIN translation t ON h.word = t.englishW WHERE h.timeStamp IN (SELECT tStamp FROM currentImage)') 
 		
 		for tuple2 in c.fetchall():
 			self.word = tuple2[0]
 			self.clevel = tuple2[1]
 			self.translatedWord = tuple2[2]
 			self.timeStamp = tuple2[3]
+			self.definition = tuple2[4]
 		print("DEBUG word display: " + self.word)
 		imageValue = str(self.timeStamp) + ".jpg"
 		print (imageValue)
 		wimg = Image(source = PATH_TO_IMG + imageValue)
 		self.add_widget(wimg)
-		
-		self.label = self.word + "\nTranslation of \'" + self.word + "\': " + self.translatedWord + "\nDefinition: "
+		#self.objectInformation = "test"
+		self.objectInformation = self.word + "\nTranslation of \'" + self.word + "\': " + self.translatedWord + "\nDefinition: " + str(self.definition)
 		return 
 	pass
 
@@ -1033,6 +1025,14 @@ class CameraScreen(Screen):
 		numOfObjects = all_rows[0]
 		#Check if there are more than 10 objects in the DB
 		if numOfObjects > 9:
+			#Get minimum time stamp in history 
+			c.execute("select MIN(timeStamp) from history")
+			#Object to hold the row for this timeStamp 
+			row = c.fetchone()
+			#variable to hold the minimum timeStamp 
+			timeStampMin = row[0]
+			#Remove picture from memory 
+			os.remove(PATH_TO_IMG + str(timeStampMin) + ".jpg")
 			#Delete oldest object if there are more than 10
 			c.execute("delete from history where timeStamp IN (select MIN(timeStamp) from history)")
 		#Insert New object into DB
