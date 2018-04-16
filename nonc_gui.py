@@ -101,8 +101,8 @@ Builder.load_string('''
 			anchor_y: 'bottom'
 
 			Button:
-				text: '<='
-				size: 150, 60
+				text: ''
+				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press:
@@ -112,7 +112,7 @@ Builder.load_string('''
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
-					size: 100, 60
+					size: 90, 60
 					#allow_stretch: True
 			
 		AnchorLayout:
@@ -138,27 +138,13 @@ Builder.load_string('''
 			id: camera
 			resolution: (-1,-1)
 			play: True
-			
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
-			
-	
-				
-		   
+					   
 <SettingsScreen>:
 	RelativeLayout:
 	
 		Label:
 			text: 'Settings'
-			font_size: '16sp'
+			font_size: '25sp'
 			bold: True
 			halign: 'center'
 			valign: 'top'
@@ -199,11 +185,11 @@ Builder.load_string('''
 		
 		AnchorLayout:
 			anchor_x:'left'
-			anchor_y:'top'
+			anchor_y: 'bottom'
 			
 			Button:
-				text: '<='
-				size: 100, 60
+				text: ''
+				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press:
@@ -213,19 +199,8 @@ Builder.load_string('''
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
-					size: 100, 60
+					size: 90, 60
 					#allow_stretch: True
-					
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
 
 <HistoryScreen>:
 	on_enter: root.clearGrid(), root.load_content()
@@ -234,7 +209,7 @@ Builder.load_string('''
 		BoxLayout:
 			
 			Button:
-				text: '<='
+				text: ''
 				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
@@ -267,7 +242,17 @@ Builder.load_string('''
 
 <ImageScreen>:
 	on_enter: root.setPicture()
-	FloatLayout:
+	AnchorLayout:
+	
+	AnchorLayout:
+		anchor_x: 'center'
+		anchor_y: 'bottom'			
+		Image:
+			source: ""
+			y: self.parent.y
+			x: self.parent.x
+			size: 150, 60
+			id: image
 	
 	AnchorLayout:
 		anchor_x: 'center'
@@ -280,10 +265,10 @@ Builder.load_string('''
 
 	AnchorLayout:
 		anchor_x: 'left'
-		anchor_y: 'top'
+		anchor_y: 'bottom'
 		
 		Button:
-			text: '<='
+			text: ''
 			size: 90, 60
 			size_hint: None, None
 			opacity: 1 if self.state == 'normal' else .5
@@ -298,7 +283,7 @@ Builder.load_string('''
 				#allow_stretch: True
 	AnchorLayout:
 		anchor_x: 'right'
-		anchor_y: 'top'
+		anchor_y: 'bottom'
 		
 			#Delete button				
 		Button:
@@ -308,21 +293,15 @@ Builder.load_string('''
 			opacity: 1 if self.state == 'normal' else .5
 			on_press: 
 				root.deleteObject() 
-				root.manager.current = 'hist'				
-	AnchorLayout:
-		anchor_x: 'center'
-		anchor_y: 'top'
+				root.manager.current = 'hist'	
 
-		Label:
-			text: root.label
-			size: 300, 60
-			size_hint: None, None
+					
 				
 <LanguagesScreen>:
 
 	RelativeLayout:
 		Label:
-			text: 'Settings'
+			text: 'Language Settings'
 			font_size: '26sp'
 			bold: True
 			halign: 'center'
@@ -360,11 +339,11 @@ Builder.load_string('''
 	
 		AnchorLayout:
 			anchor_x:'left'
-			anchor_y:'top'
+			anchor_y: 'bottom'
 			
 			Button:
-				text: '<='
-				size: 80, 60
+				text: ''
+				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press:
@@ -374,19 +353,9 @@ Builder.load_string('''
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
-					size: 80, 60
+					size: 90, 60
 					#allow_stretch: True
 					
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
 <CustomDropDown1>:
 	padding: [0,0,0,0]
 	Button:
@@ -479,11 +448,11 @@ Builder.load_string('''
 			
 		AnchorLayout:
 			anchor_x:'left'
-			anchor_y:'top'
+			anchor_y: 'bottom'
 			
 			Button:
 				text: ''
-				size: 80, 60
+				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press:
@@ -493,18 +462,8 @@ Builder.load_string('''
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
-					size: 80, 60
+					size: 90, 60
 					#allow_stretch: True
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
 				
 <DownloadScreen>:
 
@@ -518,19 +477,6 @@ Builder.load_string('''
 			halign: 'center'
 			valign: 'top'
 			text_size: self.size
-			
-		
-			
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
 		
 		AnchorLayout:
 			anchor_x: 'center'
@@ -548,11 +494,11 @@ Builder.load_string('''
 		
 		AnchorLayout:
 			anchor_x:'left'
-			anchor_y:'top'
+			anchor_y: 'bottom'
 			
 			Button:
-				text: '<='
-				size: 80, 60
+				text: ''
+				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press:
@@ -562,15 +508,9 @@ Builder.load_string('''
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
-					size: 80, 60
+					size: 90, 60
 					#allow_stretch: True
-		Button:
-			text: 'Display Downloaded Languages'
-			size: 80, 60
-			size_hint: None, None
-			opacity: 1 if self.state == 'normal' else .5
-#			on_release: app.dlist(self)
-
+					
 <IssueScreen>:
 	email: email_in
 	sub: sub_in
@@ -605,11 +545,11 @@ Builder.load_string('''
 		
 		AnchorLayout:
 			anchor_x:'left'
-			anchor_y:'top'
+			anchor_y: 'bottom'
 			
 			Button:
-				text: '<='
-				size: 80, 60
+				text: ''
+				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press:
@@ -619,19 +559,8 @@ Builder.load_string('''
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
-					size: 80, 60
-					#allow_stretch: True
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
-			
+					size: 90, 60
+					#allow_stretch: True		
 	
 		BoxLayout:
 			orientation: 'vertical'
@@ -870,7 +799,6 @@ class ImageScreen(Screen):
 	clevel = 0.0
 	translatedWord = ""
 	timeStamp = 0.0
-	label = ""
 	definition = ""
 		
 	#Function to delete an object from db as well as the .jpg file associated with that image 
@@ -896,26 +824,24 @@ class ImageScreen(Screen):
 		#Cursor for DB object
 		c = conn.cursor()
 		c.execute("select * from currentImage")
-		c.execute('select h.word, h.clevel, h.translatedWord, h.timeStamp from history h, currentImage c where h.timeStamp = c.tStamp')
-		conn.commit()
+		#c.execute('select h.word, h.clevel, h.translatedWord, h.timeStamp from history h, currentImage c where h.timeStamp = c.tStamp')
+		c.execute('select h.word, h.clevel, h.translatedWord, h.timeStamp, t.definition from history h LEFT JOIN translation t ON h.word = t.englishW WHERE h.timeStamp IN (SELECT tStamp FROM currentImage)') 
 		
 		for tuple2 in c.fetchall():
 			self.word = tuple2[0]
 			self.clevel = tuple2[1]
 			self.translatedWord = tuple2[2]
 			self.timeStamp = tuple2[3]
+			self.definition = tuple2[4]
 		print("DEBUG word display: " + self.word)
 		imageValue = str(self.timeStamp) + ".jpg"
-		print (imageValue)
-		wimg = Image(source = PATH_TO_IMG + imageValue)
-		self.add_widget(wimg)
-		
-		self.label = self.word + "\nTranslation of \'" + self.word + "\': " + self.translatedWord + "\nDefinition: "
+		#print (imageValue)
+		#wimg = Image(source = PATH_TO_IMG + imageValue)
+		#self.add_widget(wimg)
+		self.ids.image.source = PATH_TO_IMG + imageValue
+		#self.objectInformation = "test"
+		self.objectInformation = self.word + "\nTranslation of \'" + self.word + "\': " + self.translatedWord + "\nDefinition: " + str(self.definition)
 		return 
-	pass
-
-
-class LanguageScreen(Screen) :
 	pass
 
 class LanguagesScreen(Screen) :
@@ -1033,6 +959,14 @@ class CameraScreen(Screen):
 		numOfObjects = all_rows[0]
 		#Check if there are more than 10 objects in the DB
 		if numOfObjects > 9:
+			#Get minimum time stamp in history 
+			c.execute("select MIN(timeStamp) from history")
+			#Object to hold the row for this timeStamp 
+			row = c.fetchone()
+			#variable to hold the minimum timeStamp 
+			timeStampMin = row[0]
+			#Remove picture from memory 
+			os.remove(PATH_TO_IMG + str(timeStampMin) + ".jpg")
 			#Delete oldest object if there are more than 10
 			c.execute("delete from history where timeStamp IN (select MIN(timeStamp) from history)")
 		#Insert New object into DB
@@ -1076,7 +1010,6 @@ sm = ScreenManager()
 sm.add_widget(MenuScreen(name='menu'))
 sm.add_widget(SettingsScreen(name='settings'))
 sm.add_widget(HistoryScreen(name='hist'))
-sm.add_widget(LanguageScreen(name='lang'))
 sm.add_widget(PowerScreen(name='power'))
 sm.add_widget(IssueScreen(name='report'))
 sm.add_widget(LanguagesScreen(name='langs'))

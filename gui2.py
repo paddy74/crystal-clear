@@ -101,8 +101,8 @@ Builder.load_string('''
 			anchor_y: 'bottom'
 
 			Button:
-				text: '<='
-				size: 150, 60
+				text: ''
+				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press:
@@ -112,7 +112,7 @@ Builder.load_string('''
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
-					size: 100, 60
+					size: 90, 60
 					#allow_stretch: True
 			
 		AnchorLayout:
@@ -138,27 +138,13 @@ Builder.load_string('''
 			id: camera
 			resolution: (640,480)
 			play: True
-			
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
-			
-	
-				
-		   
+					   
 <SettingsScreen>:
 	RelativeLayout:
 	
 		Label:
 			text: 'Settings'
-			font_size: '16sp'
+			font_size: '25sp'
 			bold: True
 			halign: 'center'
 			valign: 'top'
@@ -199,11 +185,11 @@ Builder.load_string('''
 		
 		AnchorLayout:
 			anchor_x:'left'
-			anchor_y:'top'
+			anchor_y: 'bottom'
 			
 			Button:
-				text: '<='
-				size: 100, 60
+				text: ''
+				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press:
@@ -213,19 +199,8 @@ Builder.load_string('''
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
-					size: 100, 60
+					size: 90, 60
 					#allow_stretch: True
-					
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
 
 <HistoryScreen>:
 	on_enter: root.clearGrid(), root.load_content()
@@ -234,7 +209,7 @@ Builder.load_string('''
 		BoxLayout:
 			
 			Button:
-				text: '<='
+				text: ''
 				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
@@ -290,10 +265,10 @@ Builder.load_string('''
 
 	AnchorLayout:
 		anchor_x: 'left'
-		anchor_y: 'top'
+		anchor_y: 'bottom'
 		
 		Button:
-			text: '<='
+			text: ''
 			size: 90, 60
 			size_hint: None, None
 			opacity: 1 if self.state == 'normal' else .5
@@ -308,7 +283,7 @@ Builder.load_string('''
 				#allow_stretch: True
 	AnchorLayout:
 		anchor_x: 'right'
-		anchor_y: 'top'
+		anchor_y: 'bottom'
 		
 			#Delete button				
 		Button:
@@ -326,7 +301,7 @@ Builder.load_string('''
 
 	RelativeLayout:
 		Label:
-			text: 'Settings'
+			text: 'Language Settings'
 			font_size: '26sp'
 			bold: True
 			halign: 'center'
@@ -364,11 +339,11 @@ Builder.load_string('''
 	
 		AnchorLayout:
 			anchor_x:'left'
-			anchor_y:'top'
+			anchor_y: 'bottom'
 			
 			Button:
-				text: '<='
-				size: 80, 60
+				text: ''
+				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press:
@@ -378,19 +353,9 @@ Builder.load_string('''
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
-					size: 80, 60
+					size: 90, 60
 					#allow_stretch: True
 					
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
 <CustomDropDown1>:
 	padding: [0,0,0,0]
 	Button:
@@ -483,11 +448,11 @@ Builder.load_string('''
 			
 		AnchorLayout:
 			anchor_x:'left'
-			anchor_y:'top'
+			anchor_y: 'bottom'
 			
 			Button:
 				text: ''
-				size: 80, 60
+				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press:
@@ -497,18 +462,8 @@ Builder.load_string('''
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
-					size: 80, 60
+					size: 90, 60
 					#allow_stretch: True
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
 				
 <DownloadScreen>:
 
@@ -522,19 +477,6 @@ Builder.load_string('''
 			halign: 'center'
 			valign: 'top'
 			text_size: self.size
-			
-		
-			
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
 		
 		AnchorLayout:
 			anchor_x: 'center'
@@ -552,11 +494,11 @@ Builder.load_string('''
 		
 		AnchorLayout:
 			anchor_x:'left'
-			anchor_y:'top'
+			anchor_y: 'bottom'
 			
 			Button:
-				text: '<='
-				size: 80, 60
+				text: ''
+				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press:
@@ -566,15 +508,9 @@ Builder.load_string('''
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
-					size: 80, 60
+					size: 90, 60
 					#allow_stretch: True
-		Button:
-			text: 'Display Downloaded Languages'
-			size: 80, 60
-			size_hint: None, None
-			opacity: 1 if self.state == 'normal' else .5
-#			on_release: app.dlist(self)
-
+					
 <IssueScreen>:
 	email: email_in
 	sub: sub_in
@@ -609,11 +545,11 @@ Builder.load_string('''
 		
 		AnchorLayout:
 			anchor_x:'left'
-			anchor_y:'top'
+			anchor_y: 'bottom'
 			
 			Button:
-				text: '<='
-				size: 80, 60
+				text: ''
+				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press:
@@ -623,19 +559,8 @@ Builder.load_string('''
 					source: 'kivy.png'
 					y: self.parent.y
 					x: self.parent.x
-					size: 80, 60
-					#allow_stretch: True
-		AnchorLayout:
-			anchor_x: 'right'
-			anchor_y: 'top'
-					
-			Button:
-				text: 'Exit'
-				size: 80, 60
-				size_hint: None, None
-				opacity: 1 if self.state == 'normal' else .5
-				on_press: app.get_running_app().stop()
-			
+					size: 90, 60
+					#allow_stretch: True		
 	
 		BoxLayout:
 			orientation: 'vertical'
@@ -919,10 +844,6 @@ class ImageScreen(Screen):
 		return 
 	pass
 
-
-class LanguageScreen(Screen) :
-	pass
-
 class LanguagesScreen(Screen) :
 	button_text = StringProperty('English')
 	button_text2 = StringProperty('Spanish')
@@ -1089,7 +1010,6 @@ sm = ScreenManager()
 sm.add_widget(MenuScreen(name='menu'))
 sm.add_widget(SettingsScreen(name='settings'))
 sm.add_widget(HistoryScreen(name='hist'))
-sm.add_widget(LanguageScreen(name='lang'))
 sm.add_widget(PowerScreen(name='power'))
 sm.add_widget(IssueScreen(name='report'))
 sm.add_widget(LanguagesScreen(name='langs'))
