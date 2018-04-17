@@ -1,1 +1,9 @@
 tensorflow
+opencv2-python
+numpy
+kivy
+pyttsx3
+sqlite3
+webbrowser
+imutils
+smtplib
