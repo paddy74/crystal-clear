@@ -9,7 +9,22 @@
 
 Crystal CLEAR is developed as a senior project for nine undergraduate computer science studentds at Old Dominion University.
 
-Crystal CLEAR is intended to be an augmented reality application which overlays the video feed with the translated labels of objects in the environment.
+Crystal CLEAR is intended to be an augmented reality application which overlays a video feed with the translated labels of objects in the environment.
+
+## Getting Started
+
+### Prerequisites
+This project was developed and tested using Python 3.6 on Ubuntu 16.04
+
+Dependencies can be installed using pip:
+```
+$ pip install -r requirements.txt
+```
+
+### Usage
+```
+$ python crystal-clear/crystal-clear.py
+```
 
 ## Contributing
 
@@ -17,7 +32,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository]().
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](tags).
 
 ## Authors
 
@@ -31,7 +46,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * **Sinh Ly** - *Contributor* - [lyst-01](https://github.com/lyst-01)
 * **Tristan O'Neil** - *Contributor* - [tonei](https://github.com/tonei)
 
-See also the list of [contributors](https://github.com/paddy74/cs532-s17/graphs/contributors) who participated in this project.
+See also the list of [contributors](graphs/contributors) who participated in this project.
 
 ## License
 
