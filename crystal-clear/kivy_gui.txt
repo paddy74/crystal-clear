@@ -1,0 +1,599 @@
+<MenuScreen>:
+	FloatLayout:
+		AnchorLayout:
+			anchor_x: 'right'
+			anchor_y: 'bottom'
+
+			Button:
+				text: 'Settings'
+				size: 150, 60
+				size_hint: None, None
+				on_press:
+					root.manager.transition.direction = 'left'
+					root.manager.current = 'settings'
+			
+		AnchorLayout:
+			anchor_x: 'left'
+			anchor_y: 'bottom'
+		
+			Button:
+				text: 'History'
+				size: 150, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.current = 'hist'
+		
+		AnchorLayout:
+			anchor_x:'center'
+			anchor_y:'bottom'
+			
+			Button:
+				text: 'Test Cam'
+				size: 150, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.transition.direction = 'left'
+					root.manager.current = 'cam'
+					
+		AnchorLayout:
+			anchor_x: 'right'
+			anchor_y: 'top'
+					
+			Button:
+				text: 'Exit'
+				size: 80, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: app.get_running_app().stop()
+					
+<CameraScreen>:
+	AnchorLayout:
+	
+		AnchorLayout:
+			anchor_x: 'right'
+			anchor_y: 'top'
+			
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: root.playSound()
+				
+				Image:
+					source: 'speaker.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+		
+		AnchorLayout:
+			anchor_x: 'left'
+			anchor_y: 'bottom'
+
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'menu'
+				Image:
+					source: 'kivy.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+			
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'bottom'
+	
+			Button:
+				text: 'Capture'
+				size: 100, 60
+				size_hint: None, None
+				on_press: root.takePicture(), root.runScript(), root.updateText()
+					
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'top'
+	
+			Label:
+				text: root.objectLabel
+				size: 600, 60
+				size_hint: None, None
+				text_size: self.size
+				
+		Camera:
+			id: camera
+			resolution: (640,480)
+			play: True
+					   
+<SettingsScreen>:
+	RelativeLayout:
+	
+		Label:
+			text: 'Settings'
+			font_size: '25sp'
+			bold: True
+			halign: 'center'
+			valign: 'top'
+			text_size: self.size
+			
+		Button:
+			text: 'Language Settings'
+			size: 150, 60
+			size_hint: None, None
+			pos: root.width/2 - self.width/2, root.height - 2 * self.height
+			opacity: 1 if self.state == 'normal' else .5
+			on_press:
+				root.manager.transition.direction = 'left'
+				root.manager.current = 'langs'
+		
+			
+		Button:
+			text: 'Power Settings'
+			size: 150, 60
+			size_hint: None, None
+			pos: root.width/2 - self.width/2, root.height - 4 * self.height
+			opacity: 1 if self.state == 'normal' else .5
+			on_press:
+				root.manager.transition.direction = 'left'
+				root.manager.current = 'power'
+				
+					
+		Button:
+			text: 'Report an Issue'
+			size: 150, 60
+			size_hint: None, None
+			pos: root.width/2 - self.width/2, root.height - 6 * self.height
+			opacity: 1 if self.state == 'normal' else .5
+			on_press:
+				root.manager.transition.direction = 'left'
+				root.manager.current = 'report' 
+		
+		
+		AnchorLayout:
+			anchor_x:'left'
+			anchor_y: 'bottom'
+			
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'menu'
+				Image:
+					source: 'kivy.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+
+<HistoryScreen>:
+	on_enter: root.clearGrid(), root.load_content()
+	FloatLayout:
+	
+		BoxLayout:
+			
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'menu'
+				Image:
+					source: 'kivy.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+				
+			GridLayout:	  
+				cols: 2
+				# just add a id that can be accessed later on
+				id: content
+				
+#Delete button				
+			Button:
+				text: 'Clear History'
+				size: 110, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: 
+					root.deleteHistory()
+					root.manager.current = 'hist'
+					root.clearGrid()
+					root.load_content()
+
+<ImageScreen>:
+	on_enter: root.setPicture()
+	AnchorLayout:
+	
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'bottom'			
+			Image:
+				source: ""
+				y: self.parent.y
+				x: self.parent.x
+				size: 150, 60
+				id: image
+		
+		AnchorLayout:
+			anchor_x: 'right'
+			anchor_y: 'top'
+		
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: root.playSound()
+				
+				Image:
+					source: 'speaker.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+		
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'top'
+			
+			Label:
+				text: root.objectInformation
+				size: 600, 60
+				size_hint: None, None
+				text_size: self.size
+
+		AnchorLayout:
+			anchor_x: 'left'
+			anchor_y: 'bottom'
+			
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'hist'
+				Image:
+					source: 'kivy.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+		AnchorLayout:
+			anchor_x: 'right'
+			anchor_y: 'bottom'
+			
+				#Delete button				
+			Button:
+				text: 'Delete from History'
+				size: 150, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: 
+					root.deleteObject() 
+					root.manager.current = 'hist'	
+
+					
+				
+<LanguagesScreen>:
+
+	RelativeLayout:
+		Label:
+			text: 'Language Settings'
+			font_size: '26sp'
+			bold: True
+			halign: 'center'
+			valign: 'top'
+			text_size: self.size
+			
+			
+
+		Button: 
+			text: root.button_text
+			size: 150, 60
+			size_hint: None, None
+			pos: root.width/2 - self.width/2, root.height - 2 * self.height
+			opacity: 1 if self.state == 'normal' else .5
+			on_release: root.open_drop_down(self)
+		
+		Button: 
+			text: root.button_text2
+			size: 150, 60
+			size_hint: None, None
+			pos: root.width/2 - self.width/2, root.height - 4 * self.height
+			opacity: 1 if self.state == 'normal' else .5
+			on_release: root.open_2(self)
+			
+			
+		Button:
+			text: 'Download Languages'
+			size: 150, 60
+			size_hint: None, None
+			pos: root.width/2 - self.width/2, root.height - 6 * self.height
+			opacity: 1 if self.state == 'normal' else .5
+			on_press:
+				root.manager.transition.direction = 'left'
+				root.manager.current = 'download'
+	
+		AnchorLayout:
+			anchor_x:'left'
+			anchor_y: 'bottom'
+			
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'settings'
+				Image:
+					source: 'kivy.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+					
+<CustomDropDown1>:
+	padding: [0,0,0,0]
+	Button:
+		text: 'English'
+		size:(200,50)
+		size_hint:(None,None)
+		text_size: self.size
+		valign: 'center'
+		padding: (10,0)
+		on_release: root.select(self.text)
+	Button:
+		text: 'Spanish'
+		size:(200,50)
+		size_hint:(None,None)
+		text_size: self.size
+		valign: 'center'
+		padding: (10,0)
+		on_release: root.select(self.text)
+	Button:
+		text: 'Pig Latin'
+		size:(200,50)
+		size_hint:(None,None)
+		text_size: self.size
+		valign: 'center'
+		padding: (10,0)
+		on_release: root.select(self.text)
+		
+<CustomDropDown2>:
+	padding: [0,0,0,0]
+	Button:
+		text: 'English'
+		size:(200,50)
+		size_hint:(None,None)
+		text_size: self.size
+		valign: 'center'
+		padding: (10,0)
+		on_release: root.select(self.text)
+	Button:
+		text: 'Spanish'
+		size:(200,50)
+		size_hint:(None,None)
+		text_size: self.size
+		valign: 'center'
+		padding: (10,0)
+		on_release: root.select(self.text)
+	Button:
+		text: 'Pig Latin'
+		size:(200,50)
+		size_hint:(None,None)
+		text_size: self.size
+		valign: 'center'
+		padding: (10,0)
+		on_release: root.select(self.text)
+				
+<PowerScreen>:
+
+
+	on_enter: root.start()
+	
+	RelativeLayout:
+	
+		Label:
+			text: 'Power Settings'
+			font_size: '26sp'
+			bold: True
+			halign: 'center'
+			valign: 'top'
+			text_size: self.size
+			
+		Button:
+			id: lp
+			background_normal: ''
+			text: 'Low Power Mode'
+			size: 150, 60
+			size_hint: None, None
+			pos: root.width/2 - self.width/2, root.height - 6 * self.height
+			opacity: 1 if self.state == 'normal' else .5
+			on_release: root.loww()
+				
+		Button:
+			id: hp
+			background_normal: ''
+			text: 'High Power Mode'
+			size: 150, 60
+			size_hint: None, None
+			pos: root.width/2 - self.width/2, root.height - 4 * self.height
+			opacity: 1 if self.state == 'normal' else .5
+			on_release: root.highh()
+
+			
+		AnchorLayout:
+			anchor_x:'left'
+			anchor_y: 'bottom'
+			
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'settings'
+				Image:
+					source: 'kivy.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+				
+<DownloadScreen>:
+
+	RelativeLayout:
+	
+	
+		Label:
+			text: 'Downloaded Languages'
+			font_size: '26sp'
+			bold: True
+			halign: 'center'
+			valign: 'top'
+			text_size: self.size
+		
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'bottom'
+					
+			Button:
+				text: 'Download Packs'
+				multiline: True
+				size: 150, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: root.website()
+		
+		
+		
+		AnchorLayout:
+			anchor_x:'left'
+			anchor_y: 'bottom'
+			
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'settings'
+				Image:
+					source: 'kivy.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+					
+<IssueScreen>:
+	email: email_in
+	sub: sub_in
+	rep: report_in
+
+	RelativeLayout:
+		Label:
+			text: 'Report an Issue'
+			font_size: '25sp'
+			bold: True
+			halign: 'center'
+			valign: 'top'
+			text_size: self.size
+		
+		Label: 
+			text: 'Email Address:'
+			font_size: '16sp'
+			bold: True
+			pos_hint: {'center_x' : .35, 'center_y' : .85}
+			
+		Label:
+			text: 'Subject Line:'
+			font_size: '16sp'
+			bold: True
+			pos_hint: {'center_x': .34, 'center_y' : .69}
+			
+		Label: 
+			text: 'Body:'
+			font_size: '16sp'
+			bold: True
+			pos_hint: {'center_x' : .31, 'center_y' : .54}
+		
+		AnchorLayout:
+			anchor_x:'left'
+			anchor_y: 'bottom'
+			
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'settings'
+				Image:
+					source: 'kivy.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True		
+	
+		BoxLayout:
+			orientation: 'vertical'
+			spacing: 50
+			padding: [50, 40, 60, 20]	
+			
+			Label:
+				text: '---'
+				font_size: '16sp'
+				bold: True
+				pos_hint: {'center_x' : .5}
+				size_hint: [.01, .01]
+			
+			
+			TextInput:
+				id: email_in
+				multiline: False
+				text: ''
+				pos_hint: {'center_x' : .5 , 'y' : .3}
+				size_hint: [.5, .05]
+			
+			TextInput:
+				id: sub_in
+				multiline: False
+				text: ''
+				pos_hint: {'center_x' : .5, 'y' : .3}
+				size_hint: [.5, .05]
+				
+			TextInput:
+				id: report_in
+				auto_indent: True
+				multiline: True
+				text: ''
+				pos_hint: {'center_x' : .5, 'y' : .5}
+				size_hint: [.5, .2]
+			
+			
+			Button:
+				text: 'Submit'
+				size: 80, 20
+				pos_hint: {'center_x' : .5, 'center_y' : .1}
+				size_hint: [.5, .08]
+				on_press: app.save(email_in.text, sub_in.text, report_in.text)

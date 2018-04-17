@@ -1,5 +1,0 @@
-rubber eraser, rubber, pencil eraser 0.9065655
-pencil sharpener 0.08428176
-paintbrush 0.0029849631
-pencil box, pencil case 0.0013719704
-ballpoint, ballpoint pen, ballpen, Biro 0.0008741637

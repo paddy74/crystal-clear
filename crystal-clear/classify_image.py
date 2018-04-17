@@ -1,37 +1,3 @@
-# Copyright 2015 The TensorFlow Authors. All Rights Reserved.
-# Modifications Copyright 2018 Team Crystal. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#	  http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# ==============================================================================
-
-"""Simple image classification with Inception.
-
-Run image classification with Inception trained on ImageNet 2012 Challenge data
-set.
-
-This program creates a graph from a saved GraphDef protocol buffer,
-and runs inference on an input JPEG image. It outputs human readable
-strings of the top 5 predictions along with their probabilities.
-
-Change the --image_file argument to any jpg image to compute a
-classification of that image.
-
-Please see the tutorial and website for a detailed description of how
-to use this script to perform image recognition.
-
-https://tensorflow.org/tutorials/image_recognition/
-"""
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -48,25 +14,19 @@ import numpy as np
 from six.moves import urllib
 import tensorflow as tf
 
+
 FLAGS = None
 TEST_DIR = './tests/'
-PATH_TO_MODEL = './crystal-clear/object_detection/tmp/imagenet'
+PATH_TO_MODEL = './resources/models/imagenet/'
 GUESS_COUNT = 1
 
-
-# pylint: disable=line-too-long
 DATA_URL = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
 
 
-# pylint: enable=line-too-long
-
-
 class NodeLookup(object):
-	"""Converts integer node ID's to human readable labels."""
-
-	def __init__(self,
-				 label_lookup_path=None,
-				 uid_lookup_path=None):
+	"""Converts integer node ID's to human readable labels.
+	"""
+	def __init__(self, label_lookup_path=None, uid_lookup_path=None):
 		if not label_lookup_path:
 			label_lookup_path = os.path.join(
 				PATH_TO_MODEL, 'imagenet_2012_challenge_label_map_proto.pbtxt')
@@ -177,63 +137,8 @@ def run_inference_on_image(image):
 			print('%s (score = %.5f)' % (human_string, score))
 		return human_string, score
 
-def maybe_download_and_extract():
-	"""Download and extract model tar file."""
-	dest_directory = PATH_TO_MODEL
-	if not os.path.exists(dest_directory):
-		os.makedirs(dest_directory)
-	filename = DATA_URL.split('/')[-1]
-	filepath = os.path.join(dest_directory, filename)
-	if not os.path.exists(filepath):
-		def _progress(count, block_size, total_size):
-			sys.stdout.write('\r>> Downloading %s %.1f%%' % (
-				filename, float(count * block_size) / float(total_size) * 100.0))
-			sys.stdout.flush()
 
-		filepath, _ = urllib.request.urlretrieve(DATA_URL, filepath, _progress)
-		print()
-		statinfo = os.stat(filepath)
-		print('Successfully downloaded', filename, statinfo.st_size, 'bytes.')
-	tarfile.open(filepath, 'r:gz').extractall(dest_directory)
-
-
-def main(_):
-	maybe_download_and_extract()
-	# image = (FLAGS.image_file if FLAGS.image_file else os.path.join(FLAGS.model_dir, 'C:/Users/TO/Documents/TensorFlow/pencil.mp4'))
+def a_test(_):
 	image = (FLAGS.image_file if FLAGS.image_file else
 			 os.path.join(TEST_DIR, 'pencil.jpg'))
 	run_inference_on_image(image)
-
-
-if __name__ == '__main__':
-	parser = argparse.ArgumentParser()
-	# classify_image_graph_def.pb:
-	#	Binary representation of the GraphDef protocol buffer.
-	# imagenet_synset_to_human_label_map.txt:
-	#	Map from synset ID to a human readable string.
-	# imagenet_2012_challenge_label_map_proto.pbtxt:
-	#	Text representation of a protocol buffer mapping a label to synset ID.
-	parser.add_argument(
-		'--model_dir',
-		type=str,
-		default='./tmp/imagenet',
-		help="""\
-	  Path to classify_image_graph_def.pb,
-	  imagenet_synset_to_human_label_map.txt, and
-	  imagenet_2012_challenge_label_map_proto.pbtxt.\
-	  """
-	)
-	parser.add_argument(
-		'--image_file',
-		type=str,
-		default='',
-		help='Absolute path to image file.'
-	)
-	parser.add_argument(
-		'--num_top_predictions',
-		type=int,
-		default=5,
-		help='Display this many predictions.'
-	)
-	FLAGS, unparsed = parser.parse_known_args()
-	tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
