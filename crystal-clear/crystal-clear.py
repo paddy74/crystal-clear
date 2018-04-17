@@ -34,126 +34,172 @@ import classify_image as cl
 # Defines paths to file dependencies
 PATH_TO_IMG = './resources/captures/'
 
-def create_gui():
-	resolution_nocamera = (-1,-1)
 
+def create_gui(resolution=(-1,-1)):
+	"""Create the graphical user interface with Kivy
+
+    Parameters
+    ----------
+    resolution : tuple
+        Resolution of the devices camers. Default value is (-1, -1) which
+        indicates no camera was found
+    """
 	with open("kivy_gui.txt", 'r') as f:
 		gui_string = f.read()
 		Builder.load_string(gui_string)
 
 class MenuScreen(Screen):
+	"""
+    """
 	pass
 
 class SettingsScreen(Screen):
+	"""
+    """
 	pass
 
 class HistoryScreen(Screen):
-	#Variable to hold main ID(time stamp) that will be insert into the currentImage table 
-	pictureID = 0.0
-	#Variables to hold the ID(time stamp) for each button
-	pictureID0 = 0.0
-	pictureID1 = 0.0
-	pictureID2 = 0.0
-	pictureID3 = 0.0
-	pictureID4 = 0.0
-	pictureID5 = 0.0
-	pictureID6 = 0.0
-	pictureID7 = 0.0
-	pictureID8 = 0.0
-	pictureID9 = 0.0
+	"""
+    """
+    def __init__(self):
+    	"""
+    	"""
+		self.pictureID = 0.0  # Time stamp for currentImage table
+		# Time stamps for each button
+		self.pictureID0 = 0.0
+		self.pictureID1 = 0.0
+		self.pictureID2 = 0.0
+		self.pictureID3 = 0.0
+		self.pictureID4 = 0.0
+		self.pictureID5 = 0.0
+		self.pictureID6 = 0.0
+		self.pictureID7 = 0.0
+		self.pictureID8 = 0.0
+		self.pictureID9 = 0.0
 		
 	def selectImage(self):
-		#Connect to DB
+		"""
+	    """
+		# Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
-		#Cursor for DB object 
+		# Cursor for DB object 
 		c = conn.cursor()
-		#Delete contents of table currentImage
+		# Delete contents of table currentImage
 		c.execute("delete from currentImage")
-		#Insert selected picture time stamp into currentImage table
+		# Insert selected picture time stamp into currentImage table
 		c.execute("insert into currentImage (tStamp) values (?)", (float(self.pictureID),))
-		#Commit changes 
+		# Commit changes 
 		conn.commit()
-		#Close connection to DB 
+		# Close connection to DB 
 		conn.close()
-		return 
-	#Function to clear all widgets attached to grid layout 
+		return
+
 	def clearGrid(self):
+		"""Clear all widgets attached to grid layout
+	    """
 		self.ids.content.clear_widgets()
 		return
-	#Function to change to ImageScreen and load first image in grid layout to that screen 
+
 	def viewImage0(self):
+		"""Change to ImageScreen and load first image in grid layout to that
+		screen
+	    """
 		self.pictureID = self.pictureID0
 		self.selectImage()
 		sm.current = 'img'
 		return
-	#Function to change to ImageScreen and load second image in grid layout to that screen
+
 	def viewImage1(self):
+		"""Change to ImageScreen and load second image in grid layout to that
+		screen
+	    """
 		self.pictureID = self.pictureID1
 		self.selectImage()
 		sm.current = 'img'
 		return 
-	#Function to change to ImageScreen and load third image in grid layout to that screen	
+
 	def viewImage2(self):
+		"""Change to ImageScreen and load third image in grid layout to that
+		screen
+	    """
 		self.pictureID = self.pictureID2
 		self.selectImage()
 		sm.current = 'img'
 		return 
-	#Function to change to ImageScreen and load fourth image in grid layout to that screen	
+
 	def viewImage3(self):
 		self.pictureID = self.pictureID3
 		self.selectImage()
 		sm.current = 'img'
 		return 
-	#Function to change to ImageScreen and load fifth image in grid layout to that screen	
+
 	def viewImage4(self):
+		"""Change to ImageScreen and load fifth image in grid layout to that
+		screen
+	    """
 		self.pictureID = self.pictureID4
 		self.selectImage()
 		sm.current = 'img'
-		return 
-	#Function to change to ImageScreen and load sixth image in grid layout to that screen	
+		return
+
 	def viewImage5(self):
+		"""Change to ImageScreen and load sixth image in grid layout to that
+		screen
+	    """
 		self.pictureID = self.pictureID5
 		self.selectImage()
 		sm.current = 'img'
-		return 
-	#Function to change to ImageScreen and load seventh image in grid layout to that screen	
+		return
+
 	def viewImage6(self):
+		"""Change to ImageScreen and load seventh image in grid layout to that
+		screen
+	    """
 		self.pictureID = self.pictureID6
 		self.selectImage()
 		sm.current = 'img'
-		return 
-	#Function to change to ImageScreen and load eighth image in grid layout to that screen	
+		return
+
 	def viewImage7(self):
+		"""Change to ImageScreen and load eigth image in grid layout to that
+		screen
+	    """
 		self.pictureID = self.pictureID7
 		self.selectImage()
 		sm.current = 'img'
-		return 
-	#Function to change to ImageScreen and load ninth image in grid layout to that screen
+		return
+
 	def viewImage8(self):
+		"""Change to ImageScreen and load ninth image in grid layout to that
+		screen
+	    """
 		self.pictureID = self.pictureID8
 		self.selectImage()
 		sm.current = 'img'
 		return
-	#Function to change to ImageScreen and load tenth image in grid layout to that screen	
+
 	def viewImage9(self):
+		"""Change to ImageScreen and load tenth image in grid layout to that
+		screen
+	    """
 		self.pictureID = self.pictureID9
 		self.selectImage()
 		sm.current = 'img'
 		return
 
-	#Function to load images as buttons into the grid layout
 	def load_content(self):
+		"""Load images as buttons into the grid layout
+    	"""
 		imageIndex = 0
-		#Connect to DB
+
 		conn = sqlite3.connect('sqlitedb.db')
-		#Cursor for DB object 
 		c = conn.cursor()
-		#Get all time stamps from history table 
+		# Get all time stamps from history table 
 		c.execute('SELECT timeStamp FROM history')
-		#Put all data fetched into python variable 
+		# Put all data fetched into python variable 
 		all_rows = c.fetchall()
 		result = []
-		#Fill result array with time stamps fetched from history table 
+		# Fill result array with time stamps fetched from history table 
 		result = [object[0] for object in all_rows]
 		#Iterate through result, assign each image to a button, add corresponding function to each button, add each button to grid layout 
 		for image in result:
@@ -204,38 +250,47 @@ class HistoryScreen(Screen):
 			self.ids.content.add_widget(imageButton)
 			imageIndex += 1
 		conn.close()
-		return 
-	#Function to delete history from the DB and the stored images 
-	def deleteHistory(self):		
-		#Connect to DB
+		return
+
+	def deleteHistory(self):
+		"""Delete history from the database and the stored images
+		"""
+		# Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
-		#Cursor for DB object
+		# Cursor for DB object
 		c = conn.cursor()
-		#Delete all contents of history table from db 
+		# Delete all contents of history table from db 
 		c.execute('delete from history')
-		#Commit changes to DB 
+		# Commit changes to DB 
 		conn.commit()
-		#Close connection to DB
+		# Close connection to DB
 		conn.close()
-		#Fill fileList with all file names in image directory 
+		# Fill fileList with all file names in image directory 
 		fileList = os.listdir(PATH_TO_IMG)
-		#Iterate through each file name and delete it from the directory 
+		# Iterate through each file name and delete it from the directory 
 		for fileName in fileList:
 			os.remove(PATH_TO_IMG+fileName)
 		return
-	pass
+
 
 class ImageScreen(Screen):
-	#Variable to hold information in label 
-	objectInformation = StringProperty()
-	#Values to be set on db query 
-	word = ""
-	clevel = 0.0
-	translatedWord = ""
-	timeStamp = 0.0
-	definition = ""
+	"""
+    """
+    def __init(self):
+    	"""
+    	"""
+		# Variable to hold information in label 
+		self.objectInformation = StringProperty()
+		# Values to be set on db query 
+		self.word = ""
+		self.clevel = 0.0
+		self.translatedWord = ""
+		self.timeStamp = 0.0
+		self.definition = ""
 	
 	def playSound(self):
+		"""
+		"""
 		if self.translatedWord == "":
 			engine = pyttsx3.init()
 			engine.say("No translation available")
@@ -249,31 +304,33 @@ class ImageScreen(Screen):
 					break
 			engine.say(self.translatedWord)
 			engine.runAndWait()
-		
-	#Function to delete an object from db as well as the .jpg file associated with that image 
+
 	def deleteObject(self):
-		#Connect to DB
+		"""Delete an object from database and its associated .jpg file
+		"""
+		# Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
-		#Cursor for DB object
+		# Cursor for DB object
 		c = conn.cursor()
-		#Delete row from table history for object currently being viewed 
+		# Delete row from table history for object currently being viewed 
 		c.execute('delete from history where timeStamp = ?', (float(self.timeStamp),))
-		#commit the changes to the db 
+		# commit the changes to the db 
 		conn.commit()
-		#close the connection to the db
+		# close the connection to the db
 		conn.close()
-		#remove the image associated with the object being viewed from the image storage folder 
+		# remove the image associated with the object being viewed from the image storage folder 
 		os.remove(PATH_TO_IMG + str(self.timeStamp) + ".jpg")
 		print ("test")
 		return 
 
 	def setPicture(self):
-		#Connect to DB
+		"""
+		"""
+		# Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
-		#Cursor for DB object
+		# Cursor for DB object
 		c = conn.cursor()
 		c.execute("select * from currentImage")
-		#c.execute('select h.word, h.clevel, h.translatedWord, h.timeStamp from history h, currentImage c where h.timeStamp = c.tStamp')
 		c.execute('select h.word, h.clevel, h.translatedWord, h.timeStamp, t.definition from history h LEFT JOIN translation t ON h.word = t.englishW WHERE h.timeStamp IN (SELECT tStamp FROM currentImage)') 
 		
 		for tuple2 in c.fetchall():
@@ -284,89 +341,116 @@ class ImageScreen(Screen):
 			self.definition = tuple2[4]
 		print("DEBUG word display: " + self.word)
 		imageValue = str(self.timeStamp) + ".jpg"
-		#print (imageValue)
-		#wimg = Image(source = PATH_TO_IMG + imageValue)
-		#self.add_widget(wimg)
 		self.ids.image.source = PATH_TO_IMG + imageValue
-		#self.objectInformation = "test"
 		self.objectInformation = self.word + "\nTranslation of \'" + self.word + "\': " + self.translatedWord + "\nDefinition: " + str(self.definition)
-		return 
-	pass
+		return
 
 class LanguagesScreen(Screen) :
-	button_text = StringProperty('English')
-	button_text2 = StringProperty('Spanish')
+	"""
+	"""
+	def __init__(self):
+		"""
+		"""
+		self.button_text = StringProperty('English')
+		self.button_text2 = StringProperty('Spanish')
+
 	def __init__(self, **kwargs):
+		"""
+		"""
 		super(LanguagesScreen, self).__init__(**kwargs)
 		self.dropdown = CustomDropDown1(self)
 		self.dropdown2 = CustomDropDown2(self)
 	
 	def open_drop_down(self, widget):
+		"""
+		"""
 		self.dropdown.open(widget)
+
 	def open_2(self, widget):
+		"""
+		"""
 		self.dropdown2.open(widget)
-	pass	
+
 	
 class PowerScreen(Screen) :
-	pressed = True
-	np = False
+	def __init__(self):
+		"""
+		"""
+		self.pressed = True
+		self.not_pressed = False
 
 	def start(self):
+		"""
+		"""
 		self.pressed = True
-		self.np = False
+		self.not_pressed = False
 		self.ids.hp.background_color = 1, .3, .4, .85
 		self.ids.lp.background_color = .18, .843, .227, 1
 
 	def highh(self):
-		if not self.np:
+		if not self.not_pressed:
 			self.ids.hp.background_color = 0.18, 0.843, 0.227, 1
 			self.ids.lp.background_color = 1, .3, .4, .85
-			self.np = True
+			self.not_pressed = True
 			self.pressed = False
 			pop = Popup(title='', content=Label(text='High Power Mode activated'), size_hint=(.5, .5))
 			pop.open()
-		elif self.np:
-			#	background_color: 1, .3, .4, .85
-			# self.np = True
-			# self.pressed = False
+		elif self.not_pressed:
 			poppp = Popup(title='', content=Label(text='High Power mode already on'), size_hint=(.5, .5))
 			poppp.open()
 
 	def loww(self):
+		"""
+		"""
 		if self.pressed:
-			# self.pressed = True
-			# self.np = False
 			popp = Popup(title='', content=Label(text='Low Power mode already on'), size_hint=(.5, .5))
 			popp.open()
 		elif not self.pressed:
 			self.ids.lp.background_color = 0.18, 0.843, 0.227, 1
 			self.ids.hp.background_color = 1, .3, .4, .85
 			self.pressed = True
-			self.np = False
+			self.not_pressed = False
 			poppi = Popup(title='', content=Label(text='Low Power Mode Activated'), size_hint=(.5, .5))
 			poppi.open()
 	
-class IssueScreen(Screen) :
+
+class IssueScreen(Screen):
+	"""
+	"""
 	pass
 
 class CustomDropDown(DropDown):
+	"""
+	"""
 	pass
 	
-class ReportScreen(Screen) :
+class ReportScreen(Screen):
+	"""
+	"""
 	pass
 
-class DownloadScreen(Screen) : 
+class DownloadScreen(Screen):
+	"""
+	"""
 	def website(instance):
+		"""
+		"""
 		webbrowser.open('http://www.cs.odu.edu/~411crystal/')
-	pass
+
 	
 class CameraScreen(Screen):
+	"""
+	"""
 	def __init__(self):
+		"""
+		"""
 		objectLabel = StringProperty()
 		timeStamp = 0
 		translatedWord = ""
 
 	def playSound(self):
+		"""
+		"""
 		if self.translatedWord == "":
 			engine = pyttsx3.init()
 			engine.say("No translation available")
@@ -382,15 +466,21 @@ class CameraScreen(Screen):
 			engine.runAndWait()
 		
 	def takePicture(self):
+		"""
+		"""
 		camera = self.ids['camera']
 		self.timeStamp = time.time()
 		camera.export_to_png(PATH_TO_IMG+str(self.timeStamp)+".jpg")
 		return
 
 	def runScript(self):
+		"""
+		"""
 		return
 
 	def updateText(self):
+		"""
+		"""
 		conn = sqlite3.connect('sqlitedb.db')
 		c = conn.cursor()
 		
@@ -416,82 +506,101 @@ class CameraScreen(Screen):
 	#Function to insert data into the SQLITE database, history table 
 	#Takes parameters for the word, the confidence level, and a time stamp
 	def insertObjectIntoHistoryDB(word, clevel, translatedWord, timeStamp):
-		#Connect to DB
+		"""Function to insert data into the SQLITE database, history table
+
+	    Parameters
+	    ----------
+	    word
+	    clevel
+	    	Confidence level
+	    translatedWord
+	    timeStamp
+	    """
+		# Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
-		#Cursor for DB object
+		# Cursor for DB object
 		c = conn.cursor()
-		#Get number of objects in DB
+		# Get number of objects in DB
 		c.execute("select count(*) from history")
-		#Object to hold first tuple in DB
+		# Object to hold first tuple in DB
 		all_rows = c.fetchone()
-		#Object to hold first element in first tuple which is the count of the number of objects
+		# Object to hold first element in first tuple which is the count of the number of objects
 		numOfObjects = all_rows[0]
-		#Check if there are more than 10 objects in the DB
+		# Check if there are more than 10 objects in the DB
 		if numOfObjects > 9:
-			#Get minimum time stamp in history 
+			# Get minimum time stamp in history 
 			c.execute("select MIN(timeStamp) from history")
-			#Object to hold the row for this timeStamp 
+			# Object to hold the row for this timeStamp 
 			row = c.fetchone()
-			#variable to hold the minimum timeStamp 
+			# Variable to hold the minimum timeStamp 
 			timeStampMin = row[0]
-			#Remove picture from memory 
+			# Remove picture from memory 
 			os.remove(PATH_TO_IMG + str(timeStampMin) + ".jpg")
-			#Delete oldest object if there are more than 10
+			# Delete oldest object if there are more than 10
 			c.execute("delete from history where timeStamp IN (select MIN(timeStamp) from history)")
-		#Insert New object into DB
+		# Insert New object into DB
 		c.execute("insert into history (word, clevel, translatedWord, timeStamp) values (?,?,?,?)", (word, clevel, translatedWord, timeStamp))
-		#Save (commit) the changes
+		# Save (commit) the changes
 		conn.commit()
-		#Close the connection
+		# Close the connection
 		conn.close()
-		#End of function
+		# End of function
 		return
 
-	
+
 class CustomDropDown1(DropDown):
+	"""
+	"""
 	def __init__(self, screen_manager, **kwargs):
+		"""
+		"""
 		super(CustomDropDown1, self).__init__(**kwargs)
 		self.sm = screen_manager
 	  
 	def on_select(self, data):
+		"""
+		"""
 		self.sm.button_text = data
 		
 class CustomDropDown2(DropDown):
+	"""
+	"""
 	def __init__(self, screen_manager, **kwargs):
+		"""
+		"""
 		super(CustomDropDown2, self).__init__(**kwargs)
 		self.sm = screen_manager
 	  
 	def on_select(self, data):
+		"""
+		"""
 		self.sm.button_text2 = data
-	
-#dropdown = CustomDropDown()
-#mainbutton = Button(text='Hello', size_hint=(None, None))
-#mainbutton.bind(on_release=dropdown.open)
-#dropdown.bind(on_select=lambda instance, x: setattr(mainbutton, 'text', x))
-#sm.add_widget(MenuScreen(name=menu))	
 		
-sm = ScreenManager()
-
-#for i in range(2): #making 2 base screens- history menu, settings menu
-	#screen = Screen(name='Title %d' % i)
-	#sm.add_widget(screen)
-	
-sm.add_widget(MenuScreen(name='menu'))
-sm.add_widget(SettingsScreen(name='settings'))
-sm.add_widget(HistoryScreen(name='hist'))
-sm.add_widget(PowerScreen(name='power'))
-sm.add_widget(IssueScreen(name='report'))
-sm.add_widget(LanguagesScreen(name='langs'))
-sm.add_widget(CameraScreen(name='cam'))
-sm.add_widget(DownloadScreen(name='download'))
-sm.add_widget(ImageScreen(name='img'))
 
 
 class TestApp(App):
+	"""
+	"""
 	def build(self):
+		"""
+		"""
+		sm = ScreenManager()
+	
+		sm.add_widget(MenuScreen(name='menu'))
+		sm.add_widget(SettingsScreen(name='settings'))
+		sm.add_widget(HistoryScreen(name='hist'))
+		sm.add_widget(PowerScreen(name='power'))
+		sm.add_widget(IssueScreen(name='report'))
+		sm.add_widget(LanguagesScreen(name='langs'))
+		sm.add_widget(CameraScreen(name='cam'))
+		sm.add_widget(DownloadScreen(name='download'))
+		sm.add_widget(ImageScreen(name='img'))
+
 		return sm
 		
 	def save(self, email, sub, rep):
+		"""
+		"""
 		fob = open( './crystal-clear/test.txt', 'w')
 		fob.write('From: '+ email + '\n')
 		fob.write('Subject: ' + sub + '\n')
@@ -517,6 +626,8 @@ class TestApp(App):
 		fob.close()
 
 	def dlist(self):
+		"""
+		"""
 		file = open ('downloaded.txt', 'r')
 		i=0;
 		for line in file:
@@ -526,15 +637,15 @@ class TestApp(App):
 
 
 if __name__ == '__main__':
-	# Check for existing db
+	# Initialize database if found
 	if os.path.isfile('./sqlitedb.db'):
 		print("\nDatabase already exists, skipping DB initialization\n")
 	else:
-		#Connect to DB
+		# Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
-		#Cursor for database object 
+		# Cursor for database object 
 		c = conn.cursor()
-		#Create history table that will store the word in english, the confidence level, the translated word in spanish, and a timestamp  
+		# Create history table that will store the word in english, the confidence level, the translated word in spanish, and a timestamp  
 		c.execute('''CREATE TABLE history
 					 (word varchar(40) NOT NULL, clevel int NOT NULL, translatedWord varchar(40) NOT NULL, timeStamp int PRIMARY KEY NOT NULL)''')
 		
