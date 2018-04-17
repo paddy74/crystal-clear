@@ -151,8 +151,9 @@ Builder.load_string('''
 	
 			Label:
 				text: root.objectLabel
-				size: 300, 60
+				size: 600, 60
 				size_hint: None, None
+				text_size: self.size
 				
 		Camera:
 			id: camera
@@ -298,8 +299,9 @@ Builder.load_string('''
 			
 			Label:
 				text: root.objectInformation
-				size: 300, 60
+				size: 600, 60
 				size_hint: None, None
+				text_size: self.size
 
 		AnchorLayout:
 			anchor_x: 'left'
