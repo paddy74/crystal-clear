@@ -27,6 +27,7 @@ from email.mime.text import MIMEText
 from kivy.uix.boxlayout import BoxLayout
 import sys
 from kivy.uix.popup import Popup
+import pyttsx3
 
 # Defines paths to file dependencies
 PATH_TO_OBJ_REC = './crystal-clear/object_detection/classify_image.py'
@@ -95,7 +96,26 @@ Builder.load_string('''
 				on_press: app.get_running_app().stop()
 					
 <CameraScreen>:
-	FloatLayout:
+	AnchorLayout:
+	
+		AnchorLayout:
+			anchor_x: 'right'
+			anchor_y: 'top'
+			
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: root.playSound()
+				
+				Image:
+					source: 'speaker.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+		
 		AnchorLayout:
 			anchor_x: 'left'
 			anchor_y: 'bottom'
@@ -244,56 +264,74 @@ Builder.load_string('''
 	on_enter: root.setPicture()
 	AnchorLayout:
 	
-	AnchorLayout:
-		anchor_x: 'center'
-		anchor_y: 'bottom'			
-		Image:
-			source: ""
-			y: self.parent.y
-			x: self.parent.x
-			size: 150, 60
-			id: image
-	
-	AnchorLayout:
-		anchor_x: 'center'
-		anchor_y: 'top'
-		
-		Label:
-			text: root.objectInformation
-			size: 300, 60
-			size_hint: None, None
-
-	AnchorLayout:
-		anchor_x: 'left'
-		anchor_y: 'bottom'
-		
-		Button:
-			text: ''
-			size: 90, 60
-			size_hint: None, None
-			opacity: 1 if self.state == 'normal' else .5
-			on_press:
-				root.manager.transition.direction = 'right'
-				root.manager.current = 'hist'
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'bottom'			
 			Image:
-				source: 'kivy.png'
+				source: ""
 				y: self.parent.y
 				x: self.parent.x
-				size: 90, 60
-				#allow_stretch: True
-	AnchorLayout:
-		anchor_x: 'right'
-		anchor_y: 'bottom'
+				size: 150, 60
+				id: image
 		
-			#Delete button				
-		Button:
-			text: 'Delete from History'
-			size: 150, 60
-			size_hint: None, None
-			opacity: 1 if self.state == 'normal' else .5
-			on_press: 
-				root.deleteObject() 
-				root.manager.current = 'hist'	
+		AnchorLayout:
+			anchor_x: 'right'
+			anchor_y: 'top'
+		
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: root.playSound()
+				
+				Image:
+					source: 'speaker.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+		
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'top'
+			
+			Label:
+				text: root.objectInformation
+				size: 300, 60
+				size_hint: None, None
+
+		AnchorLayout:
+			anchor_x: 'left'
+			anchor_y: 'bottom'
+			
+			Button:
+				text: ''
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'hist'
+				Image:
+					source: 'kivy.png'
+					y: self.parent.y
+					x: self.parent.x
+					size: 90, 60
+					#allow_stretch: True
+		AnchorLayout:
+			anchor_x: 'right'
+			anchor_y: 'bottom'
+			
+				#Delete button				
+			Button:
+				text: 'Delete from History'
+				size: 150, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: 
+					root.deleteObject() 
+					root.manager.current = 'hist'	
 
 					
 				
@@ -800,6 +838,21 @@ class ImageScreen(Screen):
 	translatedWord = ""
 	timeStamp = 0.0
 	definition = ""
+	
+	def playSound(self):
+		if self.translatedWord == "":
+			engine = pyttsx3.init()
+			engine.say("No translation available")
+			engine.runAndWait()
+		else:
+			engine = pyttsx3.init()
+			voices = engine.getProperty('voices')
+			for voice in voices:
+				if voice.name == "Microsoft Sabina Desktop - Spanish (Mexico)":
+					engine.setProperty('voice',voice.id)
+					break
+			engine.say(self.translatedWord)
+			engine.runAndWait()
 		
 	#Function to delete an object from db as well as the .jpg file associated with that image 
 	def deleteObject(self):
@@ -914,6 +967,22 @@ class DownloadScreen(Screen) :
 class CameraScreen(Screen):
 	objectLabel = StringProperty()
 	timeStamp = 0
+	translatedWord = ""
+	def playSound(self):
+		if self.translatedWord == "":
+			engine = pyttsx3.init()
+			engine.say("No translation available")
+			engine.runAndWait()
+		else:
+			engine = pyttsx3.init()
+			voices = engine.getProperty('voices')
+			for voice in voices:
+				if voice.name == "Microsoft Sabina Desktop - Spanish (Mexico)":
+					engine.setProperty('voice',voice.id)
+					break
+			engine.say(self.translatedWord)
+			engine.runAndWait()
+		
 	def takePicture(self):
 		camera = self.ids['camera']
 		self.timeStamp = time.time()
@@ -940,6 +1009,7 @@ class CameraScreen(Screen):
 		for row in all_rows:
 			trans = str(row[0])
 			defin = str(row[1])
+		self.translatedWord = trans
 		self.objectLabel = label + "\nTranslation of \'" + label + "\': " + trans + "\nDefinition: " + defin
 		CameraScreen.insertObjectIntoHistoryDB(label,clevel,trans,self.timeStamp) 
 		return	
