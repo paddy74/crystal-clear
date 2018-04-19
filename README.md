@@ -36,15 +36,15 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Jeffrey Baxter** - *Contributor* - [JeffreyBax](https://github.com/JeffreyBax)
-* **Villa Cadle** - *Documentation Specialist* - [vcadle](https://github.com/vcadle)
-* **Rufor Chen** - *Contributor* - [zhPaint](https://github.com/zhPaint)
-* **Patrick Cox** - *Project Lead* - [paddy74](https://github.com/paddy74)
-* **Jason Dery** - *Contributor* - [jdery001](https://github.com/jdery001)
+* **Patrick Cox** - *Project Manager* - [paddy74](https://github.com/paddy74)
+* **Rufor Chen** - *Lead Developer* - [zhPaint](https://github.com/zhPaint)
+* **Tristan O'Neil** - *Developer* - [tonei](https://github.com/tonei)
+* **Jason Dery** - *Developer* - [jdery001](https://github.com/jdery001)
+* **Jeffrey Baxter** - *Developer* - [JeffreyBax](https://github.com/JeffreyBax)
+* **Villa Cadle** - *Developer* - [vcadle](https://github.com/vcadle)
 * **Rachael Holiday** - *Contributor* - [rholi003](https://github.com/rholi003)
-* **Forrest Knight** - *Contributor* - [ForrestKnight](https://github.com/ForrestKnight)
 * **Sinh Ly** - *Contributor* - [lyst-01](https://github.com/lyst-01)
-* **Tristan O'Neil** - *Contributor* - [tonei](https://github.com/tonei)
+* **Forrest Knight** - *Contributor* - [ForrestKnight](https://github.com/ForrestKnight)
 
 See also the list of [contributors](graphs/contributors) who participated in this project.
 
