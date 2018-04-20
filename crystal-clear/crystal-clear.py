@@ -21,7 +21,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 PATH_TO_IMG = './resources/captures/'  # TODO: Not be global
 
 
-def create_gui(resolution=(-1, -1)):
+def load_gui(resolution=(-1, -1)):
     """Create the graphical user interface with Kivy
 
     Parameters
@@ -70,26 +70,23 @@ class HistoryScreen(Screen):
     def selectImage(self):
         """
         """
-        # Connect to DB
         conn = sqlite3.connect('sqlitedb.db')
-        # Cursor for DB object
         c = conn.cursor()
+
         # Delete contents of table currentImage
         c.execute("delete from currentImage")
         # Insert selected picture time stamp into currentImage table
         c.execute("insert into currentImage (tStamp) values (?)",
                   (float(self.pictureID),))
-        # Commit changes
+
+
         conn.commit()
-        # Close connection to DB
         conn.close()
-        return
 
     def clearGrid(self):
         """Clear all widgets attached to grid layout
         """
         self.ids.content.clear_widgets()
-        return
 
     def viewImage0(self):
         """Change to ImageScreen and load first image in grid layout to that
@@ -98,7 +95,6 @@ class HistoryScreen(Screen):
         self.pictureID = self.pictureID0
         self.selectImage()
         sm.current = 'img'
-        return
 
     def viewImage1(self):
         """Change to ImageScreen and load second image in grid layout to that
@@ -107,7 +103,6 @@ class HistoryScreen(Screen):
         self.pictureID = self.pictureID1
         self.selectImage()
         sm.current = 'img'
-        return
 
     def viewImage2(self):
         """Change to ImageScreen and load third image in grid layout to that
@@ -116,13 +111,11 @@ class HistoryScreen(Screen):
         self.pictureID = self.pictureID2
         self.selectImage()
         sm.current = 'img'
-        return
 
     def viewImage3(self):
         self.pictureID = self.pictureID3
         self.selectImage()
         sm.current = 'img'
-        return
 
     def viewImage4(self):
         """Change to ImageScreen and load fifth image in grid layout to that
@@ -131,7 +124,6 @@ class HistoryScreen(Screen):
         self.pictureID = self.pictureID4
         self.selectImage()
         sm.current = 'img'
-        return
 
     def viewImage5(self):
         """Change to ImageScreen and load sixth image in grid layout to that
@@ -140,7 +132,6 @@ class HistoryScreen(Screen):
         self.pictureID = self.pictureID5
         self.selectImage()
         sm.current = 'img'
-        return
 
     def viewImage6(self):
         """Change to ImageScreen and load seventh image in grid layout to that
@@ -149,7 +140,6 @@ class HistoryScreen(Screen):
         self.pictureID = self.pictureID6
         self.selectImage()
         sm.current = 'img'
-        return
 
     def viewImage7(self):
         """Change to ImageScreen and load eigth image in grid layout to that
@@ -158,7 +148,6 @@ class HistoryScreen(Screen):
         self.pictureID = self.pictureID7
         self.selectImage()
         sm.current = 'img'
-        return
 
     def viewImage8(self):
         """Change to ImageScreen and load ninth image in grid layout to that
@@ -167,7 +156,6 @@ class HistoryScreen(Screen):
         self.pictureID = self.pictureID8
         self.selectImage()
         sm.current = 'img'
-        return
 
     def viewImage9(self):
         """Change to ImageScreen and load tenth image in grid layout to that
@@ -176,7 +164,6 @@ class HistoryScreen(Screen):
         self.pictureID = self.pictureID9
         self.selectImage()
         sm.current = 'img'
-        return
 
     def load_content(self):
         """Load images as buttons into the grid layout
@@ -241,7 +228,6 @@ class HistoryScreen(Screen):
             self.ids.content.add_widget(imageButton)
             imageIndex += 1
         conn.close()
-        return
 
     def deleteHistory(self):
         """Delete history from the database and the stored images
@@ -261,7 +247,6 @@ class HistoryScreen(Screen):
         # Iterate through each file name and delete it from the directory
         for fileName in fileList:
             os.remove(PATH_TO_IMG+fileName)
-        return
 
 
 class ImageScreen(Screen):
@@ -314,7 +299,6 @@ class ImageScreen(Screen):
         # remove the image associated with the object being viewed from the image storage folder
         os.remove(PATH_TO_IMG + str(self.timeStamp) + ".jpg")
         print("test")
-        return
 
     def setPicture(self):
         """
@@ -338,7 +322,6 @@ class ImageScreen(Screen):
         self.objectInformation = self.word + "\nTranslation of \'" + self.word + \
             "\': " + self.translatedWord + \
             "\nDefinition: " + str(self.definition)
-        return
 
 
 class LanguagesScreen(Screen):
@@ -476,12 +459,11 @@ class CameraScreen(Screen):
         camera = self.ids['camera']
         self.timeStamp = time.time()
         camera.export_to_png(PATH_TO_IMG+str(self.timeStamp)+".jpg")
-        return
 
     def runScript(self):
         """
         """
-        return
+        pass
 
     def updateText(self):
         """
@@ -509,10 +491,8 @@ class CameraScreen(Screen):
             label + "\': " + trans + "\nDefinition: " + defin
         CameraScreen.insertObjectIntoHistoryDB(
             label, clevel, trans, self.timeStamp)
-        return
 
-    # Function to insert data into the SQLITE database, history table
-    # Takes parameters for the word, the confidence level, and a time stamp
+
     def insertObjectIntoHistoryDB(word, clevel, translatedWord, timeStamp):
         """Function to insert data into the SQLITE database, history table
 
@@ -524,10 +504,9 @@ class CameraScreen(Screen):
         translatedWord
         timeStamp
         """
-        # Connect to DB
         conn = sqlite3.connect('sqlitedb.db')
-        # Cursor for DB object
         c = conn.cursor()
+
         # Get number of objects in DB
         c.execute("select count(*) from history")
         # Object to hold first tuple in DB
@@ -550,12 +529,9 @@ class CameraScreen(Screen):
         # Insert New object into DB
         c.execute("insert into history (word, clevel, translatedWord, timeStamp) values (?,?,?,?)",
                   (word, clevel, translatedWord, timeStamp))
-        # Save (commit) the changes
+
         conn.commit()
-        # Close the connection
         conn.close()
-        # End of function
-        return
 
 
 class CustomDropDown1(DropDown):
@@ -590,7 +566,7 @@ class CustomDropDown2(DropDown):
         self.sm.button_text2 = data
 
 
-class TestApp(App):
+class CrystalClear(App):
     """
     """
 
@@ -599,15 +575,15 @@ class TestApp(App):
         """
         sm = ScreenManager()
 
-        sm.add_widget(MenuScreen(name='menu'))
-        sm.add_widget(SettingsScreen(name='settings'))
-        sm.add_widget(HistoryScreen(name='hist'))
-        sm.add_widget(PowerScreen(name='power'))
-        sm.add_widget(IssueScreen(name='report'))
-        sm.add_widget(LanguagesScreen(name='langs'))
-        sm.add_widget(CameraScreen(name='cam'))
-        sm.add_widget(DownloadScreen(name='download'))
-        sm.add_widget(ImageScreen(name='img'))
+        sm.add_widget(MenuScreen())
+        sm.add_widget(SettingsScreen())
+        sm.add_widget(HistoryScreen())
+        sm.add_widget(PowerScreen())
+        sm.add_widget(IssueScreen())
+        sm.add_widget(LanguagesScreen())
+        sm.add_widget(CameraScreen())
+        sm.add_widget(DownloadScreen())
+        sm.add_widget(ImageScreen())
 
         return sm
 
@@ -652,9 +628,7 @@ class TestApp(App):
 def check_for_database():
     """Check for the language database and initialize it if not found
     """
-    if os.path.isfile('./sqlitedb.db'):
-        print("\nDatabase already exists, skipping DB initialization\n")
-    else:
+    if not os.path.isfile('./sqlitedb.db'):
         conn = sqlite3.connect('sqlitedb.db')
         c = conn.cursor()
 
@@ -673,5 +647,5 @@ def check_for_database():
 
 if __name__ == '__main__':
     check_for_database()
-    create_gui()
-    TestApp().run()
+    load_gui()
+    CrystalClear().run()
