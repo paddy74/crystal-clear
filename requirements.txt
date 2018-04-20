@@ -1,6 +1,6 @@
-tensorflow
-opencv2-python
 numpy
+tensorflow
+opencv-python
 kivy
 pyttsx3
 sqlite3
