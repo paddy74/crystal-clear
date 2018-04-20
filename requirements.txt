@@ -1,9 +1,10 @@
 numpy
 tensorflow
 opencv-python
-kivy
 pyttsx3
-sqlite3
-webbrowser
 imutils
-smtplib
+
+pygame
+cython==0.26.1
+kivy
+
