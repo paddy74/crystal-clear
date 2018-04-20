@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/paddy74/crystal-clear.svg?branch=master)](https://travis-ci.org/paddy74/crystal-clear)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/17fd79b0fb414acc86d791d68c7c4ac0)](https://www.codacy.com/app/paddy74/crystal-clear?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=paddy74/crystal-clear&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/17fd79b0fb414acc86d791d68c7c4ac0)](https://www.codacy.com/app/paddy74/crystal-clear?utm_source=github.com&utm_medium=referral&utm_content=paddy74/crystal-clear&utm_campaign=Badge_Coverage)
+[![License: Apache](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Crystal CLEAR
@@ -30,6 +31,8 @@ $ python crystal-clear/crystal-clear.py
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as below, without any additional terms or conditions.
+
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](tags).
@@ -50,7 +53,9 @@ See also the list of [contributors](graphs/contributors) who participated in thi
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under either:
+* Apache License, Version 2.0 - [LICENSE-APACHE.md](LICENSE-APACHE.md)
+* MIT License - [LICENSE-MIT.md](LICENSE-MIT.md)
 
 ## Acknowledgments
 
