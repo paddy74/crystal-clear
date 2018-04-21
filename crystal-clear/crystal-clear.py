@@ -30,9 +30,7 @@ def load_gui(resolution=(-1, -1)):
         Resolution of the devices camers. Default value is (-1, -1) which
         indicates no camera was found.
     """
-    with open("kivy_gui.txt", 'r') as f:
-        gui_string = f.read()
-        Builder.load_string(gui_string)
+    Builder.load_file("kivy_gui.kv")
 
 
 class MenuScreen(Screen):
