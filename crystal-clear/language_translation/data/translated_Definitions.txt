@@ -1,3 +1,14 @@
+television$televisión$broadcasting visual images of stationary or moving objects$Their new television is huge$Su televisor nuevo es enorme
+pencil$lápiz$a thin cylindrical pointed writing implement; a rod of marking substance encased in wood$Would you lend me a pen or pencil?$¿Me prestarías un bolígrafo o un lápiz?
+lighter$encendedor$a substance used to ignite or kindle a fire$Hand me the lighter so I can start the charcoal$Pásame el encendedor para encender el carbón
+sunglasses$Gafas de sol$a convex lens that focuses the rays of the sun; used for protecting one's eyes from bright light$If you go to the beach, don't forget to wear sunglasses$Si vas a la playa, no olvides ponerte las gafas de sol
+packet$paquete$a collection of things wrapped or boxed together$It costs 12 dollars for a packet of cigarettes$Una cajetilla de cigarrillos cuesta 12 dólares
+water bottle$botella de agua$any of various types of container for drinking water$I made sure to bring a lot of water bottles to the track meet$Me aseguré de traer muchas botellas de agua al evento de atletismo
+chair$silla$a seat for one person, with a support for the back$I am going to buy an ergonomic chair for my desk$Voy a comprarme una silla ergonómica para mi escritorio
+table$mesa$an article of furniture consisting of a flat, slablike top supported on one or more legs or other supports$The waiter took the order from our table$El camarero tomó nota de nuestra mesa
+glasses$gafas$a device to compensate for defective vision or to protect the eyes from light, dust, and the like$I have to wear glasses to be able to read$Tengo que llevar gafas para poder leer
+wallet$cartera$a pocket-size case for holding papers and paper money$I don't have any cash in my wallet$No llevo efectivo en mi cartera
+paintbrush$el pincel$a brush for applying paint, as one used in painting houses or one used in painting pictures$If you don't put your paintbrushes in paint thinner, you will not be able to use them tomorrow$Si no pones tus brochas en disolvente, no podrás usarlas mañana
 organism$organismo$a living thing that has or can develop$engPhrase$espPhrase
 benthos$bentos$a region including the bottom of the sea and the littoral zones$engPhrase$espPhrase
 heterotroph$heterótrofo$an organism that depends on complex organic substances for nutrition$engPhrase$espPhrase
@@ -7,11 +18,10 @@ pencil$lápiz$a thin cylindrical pointed writing implement; a rod of marking subs
 lighter$encendedor$a substance used to ignite or kindle a fire$engPhrase$espPhrase
 sunglasses$Gafas de sol$a convex lens that focuses the rays of the sun; used to start a fire$engPhrase$espPhrase
 packet$paquete$a collection of things wrapped or boxed together$engPhrase$espPhrase
-water bottle$botella de agua$a colorless, transparent, odorless, tasteless liquid that forms the seas, lakes, rivers, and rain and is the basis of the fluids of living organisms$engPhrase$espPhrase
+water bottle$botella de agua$$engPhrase$espPhrase
 chair$silla$a seat for one person, with a support for the back$engPhrase$espPhrase
 table$mesa$a set of data arranged in rows and columns$engPhrase$espPhrase
 glasses$gafas$a brittle transparent solid with irregular atomic structure$engPhrase$espPhrase
-wallet$billetera$a pocket-size case for holding papers and paper money$engPhrase$espPhrase
 person$persona$a human being$engPhrase$espPhrase
 animal$animal$a living organism characterized by voluntary movement$engPhrase$espPhrase
 plant$planta$buildings for carrying on industrial labor$engPhrase$espPhrase
@@ -279,6 +289,7 @@ clostridium perfringens$Clostridium perfringens$$engPhrase$espPhrase
 cyanobacteria$cianobacterias$predominantly photosynthetic prokaryotic organisms containing a blue pigment in addition to chlorophyll; occur singly or in colonies in diverse habitats; important as phytoplankton$engPhrase$espPhrase
 trichodesmium$trichodesmio$large colonial bacterium common in tropical open ocean waters; important in carbon and nitrogen fixation$engPhrase$espPhrase
 nitric bacteria$bacterias nítrico$$engPhrase$espPhrase
+spirillum$spirillum$spirally twisted elongate rodlike bacteria usually living in stagnant water$engPhrase$espPhrase
 Francisella$Francisella$a genus of Gram negative aerobic bacteria that occur as pathogens and parasite in many animals including humans$engPhrase$espPhrase
 gonococcus$gonococo$the pus producing bacterium that causes gonorrhea$engPhrase$espPhrase
 Corynebacterium diphtheriae$Corynebacterium diphtheriae$$engPhrase$espPhrase
@@ -489,6 +500,7 @@ smooth dogfish$Cazón liso$$engPhrase$espPhrase
 smoothhound$sabueso$smooth dogfish of European coastal waters$engPhrase$espPhrase
 American smooth dogfish$American liso cazón$$engPhrase$espPhrase
 Florida smoothhound$Florida látigo$$engPhrase$espPhrase
+whitetip shark$whitetip shark$$engPhrase$espPhrase
 spiny dogfish$cazón espinoso$$engPhrase$espPhrase
 Atlantic spiny dogfish$Cazón espinoso atlántico$$engPhrase$espPhrase
 Pacific spiny dogfish$Tiburón espinoso del Pacífico$$engPhrase$espPhrase
@@ -4063,13 +4075,3 @@ bezoar goat$bezoar cabra$$engPhrase$espPhrase
 markhor$markhor$large Himalayan goat with large spiraled horns$engPhrase$espPhrase
 ibex$cabra montés$wild goat of mountain areas of Eurasia and northern Africa having large recurved horns$engPhrase$espPhrase
 goat antelope$antílope de cabra$$engPhrase$espPhrase
-television$televisión$broadcasting visual images of stationary or moving objects$engPhrase$espPhrase
-pencil$lápiz$a thin cylindrical pointed writing implement; a rod of marking substance encased in wood$engPhrase$espPhrase
-lighter$encendedor$a substance used to ignite or kindle a fire$engPhrase$espPhrase
-sunglasses$Gafas de sol$a convex lens that focuses the rays of the sun; used to start a fire$engPhrase$espPhrase
-packet$paquete$a collection of things wrapped or boxed together$engPhrase$espPhrase
-water bottle$botella de agua$$engPhrase$espPhrase
-chair$silla$a seat for one person, with a support for the back$engPhrase$espPhrase
-table$mesa$a set of data arranged in rows and columns$engPhrase$espPhrase
-glasses$gafas$a brittle transparent solid with irregular atomic structure$engPhrase$espPhrase
-wallet$billetera$a pocket-size case for holding papers and paper money$engPhrase$espPhrase

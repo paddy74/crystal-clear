@@ -44,6 +44,10 @@ chosenPictureInHistory = ""
 
 import classify_image as cl
 
+#global variable for the selected native language
+native = "english"
+target = "spanish"
+
 Builder.load_string('''
 <MenuScreen>:
 	FloatLayout:
@@ -145,20 +149,21 @@ Builder.load_string('''
 				size_hint: None, None
 				on_press: root.takePicture(), root.runScript(), root.updateText()
 					
+		Camera:
+			id: camera
+			resolution: (640,480)
+			play: True
+			
 		AnchorLayout:
 			anchor_x: 'center'
 			anchor_y: 'top'
 	
 			Label:
 				text: root.objectLabel
-				size: 600, 60
+				size: 600, 200
 				size_hint: None, None
 				text_size: self.size
 				
-		Camera:
-			id: camera
-			resolution: (640,480)
-			play: True
 					   
 <SettingsScreen>:
 	RelativeLayout:
@@ -405,7 +410,10 @@ Builder.load_string('''
 		text_size: self.size
 		valign: 'center'
 		padding: (10,0)
-		on_release: root.select(self.text)
+		on_release: 
+			root.select(self.text)
+			root.setNative("english")
+		
 	Button:
 		text: 'Spanish'
 		size:(200,50)
@@ -413,7 +421,9 @@ Builder.load_string('''
 		text_size: self.size
 		valign: 'center'
 		padding: (10,0)
-		on_release: root.select(self.text)
+		on_release:
+			root.select(self.text)
+			root.setNative("spanish")
 	Button:
 		text: 'Pig Latin'
 		size:(200,50)
@@ -432,7 +442,9 @@ Builder.load_string('''
 		text_size: self.size
 		valign: 'center'
 		padding: (10,0)
-		on_release: root.select(self.text)
+		on_release: 
+			root.select(self.text)
+			root.setTarget("english")
 	Button:
 		text: 'Spanish'
 		size:(200,50)
@@ -440,7 +452,9 @@ Builder.load_string('''
 		text_size: self.size
 		valign: 'center'
 		padding: (10,0)
-		on_release: root.select(self.text)
+		on_release: 
+			root.select(self.text)
+			root.setTarget("spanish")
 	Button:
 		text: 'Pig Latin'
 		size:(200,50)
@@ -842,6 +856,7 @@ class ImageScreen(Screen):
 	definition = ""
 	
 	def playSound(self):
+		global target
 		if self.translatedWord == "":
 			engine = pyttsx3.init()
 			engine.say("No translation available")
@@ -849,10 +864,16 @@ class ImageScreen(Screen):
 		else:
 			engine = pyttsx3.init()
 			voices = engine.getProperty('voices')
-			for voice in voices:
-				if voice.name == "Microsoft Sabina Desktop - Spanish (Mexico)":
-					engine.setProperty('voice',voice.id)
-					break
+			if target == 'spanish':
+				for voice in voices:
+					if voice.name == "Microsoft Sabina Desktop - Spanish (Mexico)":
+						engine.setProperty('voice',voice.id)
+						break
+			elif target == 'english':
+				for voice in voices:
+					if voice.name != "Microsoft Sabina Desktop - Spanish (Mexico)":
+						engine.setProperty('voice', voice.id)
+						break
 			engine.say(self.translatedWord)
 			engine.runAndWait()
 		
@@ -874,6 +895,7 @@ class ImageScreen(Screen):
 		return 
 
 	def setPicture(self):
+		global native
 		#Connect to DB
 		conn = sqlite3.connect('sqlitedb.db')
 		#Cursor for DB object
@@ -895,7 +917,10 @@ class ImageScreen(Screen):
 		#self.add_widget(wimg)
 		self.ids.image.source = PATH_TO_IMG + imageValue
 		#self.objectInformation = "test"
-		self.objectInformation = self.word + "\nTranslation of \'" + self.word + "\': " + self.translatedWord + "\nDefinition: " + str(self.definition)
+		if native == "english":
+			self.objectInformation = self.word + "\nTranslation of: \'" + self.word + "\': " + self.translatedWord + "\nDefinition: " + str(self.definition)
+		elif native == "spanish":
+			self.objectInformation = self.translatedWord + "\nTraducción de: \'" + self.translatedWord + "\': " + self.word
 		return 
 	pass
 
@@ -971,6 +996,7 @@ class CameraScreen(Screen):
 	timeStamp = 0
 	translatedWord = ""
 	def playSound(self):
+		global target
 		if self.translatedWord == "":
 			engine = pyttsx3.init()
 			engine.say("No translation available")
@@ -978,10 +1004,16 @@ class CameraScreen(Screen):
 		else:
 			engine = pyttsx3.init()
 			voices = engine.getProperty('voices')
-			for voice in voices:
-				if voice.name == "Microsoft Sabina Desktop - Spanish (Mexico)":
-					engine.setProperty('voice',voice.id)
-					break
+			if target == 'spanish':
+				for voice in voices:
+					if voice.name == "Microsoft Sabina Desktop - Spanish (Mexico)":
+						engine.setProperty('voice',voice.id)
+						break
+			elif target == 'english':
+				for voice in voices:
+					if voice.name != "Microsoft Sabina Desktop - Spanish (Mexico)":
+						engine.setProperty('voice', voice.id)
+						break
 			engine.say(self.translatedWord)
 			engine.runAndWait()
 		
@@ -994,6 +1026,7 @@ class CameraScreen(Screen):
 		#os.system("python " + PATH_TO_OBJ_REC + " --image_file " + PATH_TO_IMG + str(self.timeStamp) + ".jpg " + " --model_dir " + PATH_TO_MODEL + " --num_top_predictions " + GUESS_COUNT)
 		return
 	def updateText(self):
+		global native
 		conn = sqlite3.connect('sqlitedb.db')
 		c = conn.cursor()
 		
@@ -1004,15 +1037,27 @@ class CameraScreen(Screen):
 		tuple = label.partition(',')
 		label = str(tuple[0])
 
-		c.execute('SELECT spanishW, definition FROM translation where (?) = englishW', (label,))
+		c.execute('SELECT spanishW, definition, englishP, spanishP FROM translation where (?) = englishW', (label,))
 		all_rows = c.fetchall()
 		trans = ""
 		defin = ""
+		engPhrase = ""
+		spnPhrase = ""
 		for row in all_rows:
 			trans = str(row[0])
 			defin = str(row[1])
-		self.translatedWord = trans
-		self.objectLabel = label + "\nTranslation of \'" + label + "\': " + trans + "\nDefinition: " + defin
+			engPhrase = str(row[2])
+			spnPhrase = str(row[3])
+		if spnPhrase == "espPhrase":
+			spnPhrase = None
+		if engPhrase == "engPhrase":
+			engPhrase = None
+		if native == "english":
+			self.translatedWord = trans
+			self.objectLabel = "Translation of \'" + label + "\': " + trans + "\nDefinition: " + defin + "\nEnglish Phrase: " + engPhrase + "\nSpanish Phrase: " + spnPhrase
+		elif native == "spanish":
+			self.translatedWord = label
+			self.objectLabel = "Traducción de: \'" + trans + "\': " + label + "\nFrase en Español: " + spnPhrase + "\nFrase Inglesa: " + engPhrase
 		CameraScreen.insertObjectIntoHistoryDB(label,clevel,trans,self.timeStamp) 
 		return	
 		
@@ -1055,7 +1100,11 @@ class CustomDropDown1(DropDown):
 	def __init__(self, screen_manager, **kwargs):
 		super(CustomDropDown1, self).__init__(**kwargs)
 		self.sm = screen_manager
-	  
+
+	def setNative (self, nativeLanguage):
+		global native
+		native = nativeLanguage
+
 	def on_select(self, data):
 		self.sm.button_text = data
 		
@@ -1063,7 +1112,11 @@ class CustomDropDown2(DropDown):
 	def __init__(self, screen_manager, **kwargs):
 		super(CustomDropDown2, self).__init__(**kwargs)
 		self.sm = screen_manager
-	  
+
+	def setTarget (self, targetLanguage):
+		global target
+		target = targetLanguage
+
 	def on_select(self, data):
 		self.sm.button_text2 = data
 	
