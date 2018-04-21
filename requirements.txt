@@ -1,1 +1,10 @@
+numpy
 tensorflow
+opencv-python
+pyttsx3
+imutils
+
+pygame
+cython==0.26.1
+kivy
+
