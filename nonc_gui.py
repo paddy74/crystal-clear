@@ -1,5 +1,16 @@
 import cv2 
 import webbrowser
+import argparse
+import imutils
+import time
+import sqlite3
+import os
+import subprocess
+import smtplib
+import pyttsx3
+import socket
+import sys
+import numpy as np
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.graphics import Color, Rectangle
@@ -12,22 +23,12 @@ from kivy.base import runTouchApp
 from imutils.video import VideoStream
 from imutils.video import FPS
 from kivy.properties import StringProperty
-import numpy as np
-import argparse
-import imutils
-import time
 from datetime import datetime
-import sqlite3
 from kivy.uix.textinput import TextInput
-import os
-import subprocess
-import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from kivy.uix.boxlayout import BoxLayout
-import sys
 from kivy.uix.popup import Popup
-import pyttsx3
 
 # Defines paths to file dependencies
 PATH_TO_OBJ_REC = './crystal-clear/object_detection/classify_image.py'
@@ -41,6 +42,7 @@ PATH_TO_DEFINITION = './crystal-clear/language_translation/data/spanish/definiti
 PATH_TO_USECASE = './crystal-clear/language_translation/data/spanish/use_case.pkl'
 PATH_TO_AUDIO = './crystal-clear/language_translation/data/spanish/audio.pkl'
 chosenPictureInHistory = ""
+REMOTE_SERVER = 'www.google.com'
 
 import classify_image as cl
 
@@ -50,7 +52,6 @@ Builder.load_string('''
 		AnchorLayout:
 			anchor_x: 'right'
 			anchor_y: 'bottom'
-
 			Button:
 				text: 'Settings'
 				size: 150, 60
@@ -119,7 +120,6 @@ Builder.load_string('''
 		AnchorLayout:
 			anchor_x: 'left'
 			anchor_y: 'bottom'
-
 			Button:
 				text: ''
 				size: 90, 60
@@ -222,7 +222,6 @@ Builder.load_string('''
 					x: self.parent.x
 					size: 90, 60
 					#allow_stretch: True
-
 <HistoryScreen>:
 	on_enter: root.clearGrid(), root.load_content()
 	FloatLayout:
@@ -260,7 +259,6 @@ Builder.load_string('''
 					root.manager.current = 'hist'
 					root.clearGrid()
 					root.load_content()
-
 <ImageScreen>:
 	on_enter: root.setPicture()
 	AnchorLayout:
@@ -280,13 +278,15 @@ Builder.load_string('''
 			anchor_y: 'top'
 		
 			Button:
-				text: ''
+				background_normal: ''
+				background_color: {1, 1, 1, 1}
 				size: 90, 60
 				size_hint: None, None
 				opacity: 1 if self.state == 'normal' else .5
 				on_press: root.playSound()
 				
 				Image:
+					#background_color: {0, 0, 0, 0}
 					source: 'speaker.png'
 					y: self.parent.y
 					x: self.parent.x
@@ -302,7 +302,6 @@ Builder.load_string('''
 				size: 600, 60
 				size_hint: None, None
 				text_size: self.size
-
 		AnchorLayout:
 			anchor_x: 'left'
 			anchor_y: 'bottom'
@@ -334,11 +333,9 @@ Builder.load_string('''
 				on_press: 
 					root.deleteObject() 
 					root.manager.current = 'hist'	
-
 					
 				
 <LanguagesScreen>:
-
 	RelativeLayout:
 		Label:
 			text: 'Language Settings'
@@ -347,31 +344,45 @@ Builder.load_string('''
 			halign: 'center'
 			valign: 'top'
 			text_size: self.size
-			
-			
+		
 
+		Label: 
+			text: 'Native Language:'
+			font_size: '16sp'
+			bold: False
+			pos_hint: {'center_x' : .5, 'center_y' : .85}
+			
+		Label: 
+			text: 'Target Language:'
+			font_size: '16sp'
+			bold: False
+			pos_hint: {'center_x' : .5, 'center_y' : .65}
+			
 		Button: 
+			id: 'nat'
 			text: root.button_text
 			size: 150, 60
 			size_hint: None, None
-			pos: root.width/2 - self.width/2, root.height - 2 * self.height
+			pos: root.width/2 - self.width/2, root.height - 3 * self.height
 			opacity: 1 if self.state == 'normal' else .5
 			on_release: root.open_drop_down(self)
 		
 		Button: 
+			id: 'tar'
 			text: root.button_text2
 			size: 150, 60
 			size_hint: None, None
-			pos: root.width/2 - self.width/2, root.height - 4 * self.height
+			pos: root.width/2 - self.width/2, root.height - 5 * self.height
 			opacity: 1 if self.state == 'normal' else .5
 			on_release: root.open_2(self)
 			
 			
 		Button:
+		
 			text: 'Download Languages'
 			size: 150, 60
 			size_hint: None, None
-			pos: root.width/2 - self.width/2, root.height - 6 * self.height
+			pos: root.width/2 - self.width/2, root.height - 7 * self.height
 			opacity: 1 if self.state == 'normal' else .5
 			on_press:
 				root.manager.transition.direction = 'left'
@@ -395,8 +406,21 @@ Builder.load_string('''
 					x: self.parent.x
 					size: 90, 60
 					#allow_stretch: True
-					
+		
+		#AnchorLayout:
+		#	anchor_x: 'right'
+		#	anchor_y: 'bottom'
+			
+		#	Button:
+		#		text: 'Reset Defaults'
+		#		size: 100, 60
+		#		size_hint: None, None
+		#		opacity: 1 if self.state == 'normal' else .5
+		#		on_release: root.reset()
+		
+		
 <CustomDropDown1>:
+	id: 'nati'
 	padding: [0,0,0,0]
 	Button:
 		text: 'English'
@@ -424,6 +448,7 @@ Builder.load_string('''
 		on_release: root.select(self.text)
 		
 <CustomDropDown2>:
+	id: 'targ'
 	padding: [0,0,0,0]
 	Button:
 		text: 'English'
@@ -451,8 +476,6 @@ Builder.load_string('''
 		on_release: root.select(self.text)
 				
 <PowerScreen>:
-
-
 	on_enter: root.start()
 	
 	RelativeLayout:
@@ -484,7 +507,6 @@ Builder.load_string('''
 			pos: root.width/2 - self.width/2, root.height - 4 * self.height
 			opacity: 1 if self.state == 'normal' else .5
 			on_release: root.highh()
-
 			
 		AnchorLayout:
 			anchor_x:'left'
@@ -506,12 +528,11 @@ Builder.load_string('''
 					#allow_stretch: True
 				
 <DownloadScreen>:
-
 	RelativeLayout:
 	
 	
 		Label:
-			text: 'Downloaded Languages'
+			text: 'Downloaded Language Packs'
 			font_size: '26sp'
 			bold: True
 			halign: 'center'
@@ -550,12 +571,27 @@ Builder.load_string('''
 					x: self.parent.x
 					size: 90, 60
 					#allow_stretch: True
+		
+		
+		Label:
+			text: '1. English'
+			font_size: '20sp'
+			bold: True
+			#text_size: self.size
+			pos_hint: {'center_x' : .5, 'center_y' : .85}
+		
+		Label:
+			text: '2. Spanish'
+			font_size: '20sp'
+			bold: True
+			#text_size: self.size
+			pos_hint: {'center_x': .5, 'center_y' : .8}
+			
 					
 <IssueScreen>:
 	email: email_in
 	sub: sub_in
 	rep: report_in
-
 	RelativeLayout:
 		Label:
 			text: 'Report an Issue'
@@ -602,6 +638,18 @@ Builder.load_string('''
 					size: 90, 60
 					#allow_stretch: True		
 	
+		AnchorLayout:
+			anchor_x: 'right'
+			anchor_y: 'bottom'
+			
+			Button:
+				text: 'Send Queue'
+				size: 90, 60
+				size_hint: None, None
+				opacity: 1 if self.state == 'normal' else .5
+				on_press: app.emq()
+	
+	
 		BoxLayout:
 			orientation: 'vertical'
 			spacing: 50
@@ -643,7 +691,9 @@ Builder.load_string('''
 				size: 80, 20
 				pos_hint: {'center_x' : .5, 'center_y' : .1}
 				size_hint: [.5, .08]
-				on_press: app.save(email_in.text, sub_in.text, report_in.text)
+				on_press: 
+					app.queue(email_in.text, sub_in.text, report_in.text)
+					root.reset()
 	
 	
 ''')
@@ -911,7 +961,9 @@ class LanguagesScreen(Screen) :
 		self.dropdown.open(widget)
 	def open_2(self, widget):
 		self.dropdown2.open(widget)
-	pass	
+	def reset(self):
+		self.dropdown.data = 'English'
+		self.dropdown2.data = 'Spanish'
 	
 class PowerScreen(Screen) :
 	pressed = True
@@ -953,8 +1005,16 @@ class PowerScreen(Screen) :
 			poppi.open()
 	
 class IssueScreen(Screen) :
-	pass
-
+	
+	#i = True
+	#REMOTE_SERVER = 'www.google.com'
+	
+	
+	def reset(self):
+		self.ids.email_in.text = ''
+		self.ids.sub_in.text = ''
+		self.ids.report_in.text = ''
+		
 class CustomDropDown(DropDown):
 	pass
 	
@@ -1094,11 +1154,20 @@ class TestApp(App):
 	def build(self):
 		return sm
 		
-	def save(self, email, sub, rep):
-		fob = open( './crystal-clear/test.txt', 'w')
-		fob.write('From: '+ email + '\n')
-		fob.write('Subject: ' + sub + '\n')
-		fob.write('Report: \n' + rep + '\n')
+	def dlist(self):
+		file = open ('downloaded.txt', 'r')
+		i=0;
+		for line in file:
+			i= i+1;
+			x = line.split(',')
+			print(x[0], '\t')
+			
+	def saveme(self, email, sub, rep):
+		fob = open( './crystal-clear/reps.txt', 'a')
+		fob.write(email+';'+sub+';'+rep+'\n')
+		fob.close()
+		
+	def send(self, email, sub, rep):
 		fromaddr = email
 		toaddr = 'ccreceived.reps@gmail.com'
 		msg = MIMEMultipart()
@@ -1117,15 +1186,83 @@ class TestApp(App):
 
 		server.sendmail('ccuser.reports@gmail.com', toaddr, text)
 		server.quit()
-		fob.close()
+	
+			
+	def int(self):
+		try:
+			host = socket.gethostbyname(REMOTE_SERVER)
+			s = socket.create_connection((host, 80), 2)
+			return True
+			#return yes
+		except:
+			pass
+			#return yes
+		return False
 		
-	def dlist(self):
-		file = open ('downloaded.txt', 'r')
-		i=0;
-		for line in file:
-			i= i+1;
-			x = line.split(',')
-			print(x[0], '\t')
+	
+		
+	def queue(self, email, sub, rep):
+		i = self.int()
+		print(i)
+		#i = int()
+		e = email
+		s = sub
+		r = rep
+		#print(int())
+		#print(i)
+		if i:
+			self.send(e, s, r)
+			poppie = Popup(title='Report Sent', content=Label(text='Your report has been sent!'), size_hint=(.5, .5))
+			poppie.open()
+		elif not i:
+			self.saveme(e, s, r)
+			popp = Popup(title='Report Queued', content=Label(text='Your report has been saved.'), size_hint=(.5,.5))
+			popp.open()
+			
+			
+			
+	def emq(self):
+		y = self.int()
+		if y:
+			try:
+				data = open( './crystal-clear/reps.txt', 'r+')
+					
+				for line in data:
+					a, b, c = line.split(';')
+					#print(a+' '+b+' '+c+'...')
+					fromaddr = a
+					toaddr = 'ccreceived.reps@gmail.com'
+					msg = MIMEMultipart()
+					msg['From'] = fromaddr
+					msg['To'] = toaddr
+					msg['Subject'] = 'From: ' + a + 'Issue: ' + b
+			
+					body = c
+				
+					msg.attach(MIMEText(body, 'plain'))
+			
+					server = smtplib.SMTP('smtp.gmail.com', 587)
+					server.starttls()
+					server.login('ccuser.reports@gmail.com', 'CrystalC!')
+					text=msg.as_string()
+					server.sendmail('ccuser.reports@gmail.com', toaddr, text)
+					server.quit()
+					#data.truncate()
+					
+					
+				data.close()
+				
+				data2 = open('./crystal-clear/reps.txt', 'w')
+				data2.close()
+				popip = Popup(title='Queued Reports Sent!', content=Label(text='Reports have successfully sent.'), size_hint=(.5, .5))
+				popip.open()
+			except:
+				popip2 = Popup(title='No Reports Queued.', content=Label(text='No reports to send.'), size_hint=(.5, .5))
+				popip2.open()
+		elif not y:
+			popped = Popup(title='No Internet Connection', content=Label(text='No internet connection detected. Try again later.'), size_hint=(.5, .5))
+			popped.open()
+			
 		
 if __name__ == '__main__':
 	# Check for existing db
