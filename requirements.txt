@@ -1,10 +1,9 @@
 numpy
-tensorflow
+tensorflow==1.5
 opencv-python
 pyttsx3
 imutils
 
 pygame
-cython==0.26.1
+cython==0.25.2
 kivy
-

@@ -1,7 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os.path
 import re
 
@@ -12,8 +8,6 @@ FLAGS = None
 TEST_DIR = './tests/'
 PATH_TO_MODEL = './resources/models/imagenet/'
 GUESS_COUNT = 1
-
-DATA_URL = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
 
 
 class NodeLookup(object):
@@ -85,8 +79,8 @@ class NodeLookup(object):
 
 
 def create_graph():
-    """Creates a graph from saved GraphDef file and returns a saver."""
-    # Creates graph from saved graph_def.pb.
+    """Creates a graph from saved GraphDef file and returns a saver.
+    """
     with tf.gfile.FastGFile(os.path.join(
             PATH_TO_MODEL, 'classify_image_graph_def.pb'), 'rb') as f:
         graph_def = tf.GraphDef()

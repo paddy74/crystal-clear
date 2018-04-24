@@ -24,6 +24,7 @@ $ pip install -r requirements.txt
 
 ### Usage
 ```
+$ cd crystal-clear
 $ python crystal-clear/crystal-clear.py
 ```
 

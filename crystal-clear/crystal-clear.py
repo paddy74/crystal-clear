@@ -17,6 +17,7 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 
+
 # Defines paths to file dependencies
 PATH_TO_IMG = './resources/captures/'  # TODO: Not be global
 
