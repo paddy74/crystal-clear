@@ -1,13 +1,9 @@
-import os.path
 import re
-
 import numpy as np
 import tensorflow as tf
 
-FLAGS = None
-TEST_DIR = './tests/'
+
 PATH_TO_MODEL = './resources/models/imagenet/'
-GUESS_COUNT = 1
 
 
 class NodeLookup(object):
@@ -16,11 +12,10 @@ class NodeLookup(object):
 
     def __init__(self, label_lookup_path=None, uid_lookup_path=None):
         if not label_lookup_path:
-            label_lookup_path = os.path.join(
-                PATH_TO_MODEL, 'imagenet_2012_challenge_label_map_proto.pbtxt')
+            label_lookup_path = PATH_TO_MODEL + 'imagenet_2012_challenge_label_map_proto.pbtxt'
         if not uid_lookup_path:
-            uid_lookup_path = os.path.join(
-                PATH_TO_MODEL, 'imagenet_synset_to_human_label_map.txt')
+            uid_lookup_path = PATH_TO_MODEL + 'imagenet_synset_to_human_label_map.txt'
+
         self.node_lookup = self.load(label_lookup_path, uid_lookup_path)
 
     def load(self, label_lookup_path, uid_lookup_path):
@@ -81,14 +76,13 @@ class NodeLookup(object):
 def create_graph():
     """Creates a graph from saved GraphDef file and returns a saver.
     """
-    with tf.gfile.FastGFile(os.path.join(
-            PATH_TO_MODEL, 'classify_image_graph_def.pb'), 'rb') as f:
+    with tf.gfile.FastGFile(PATH_TO_MODEL + 'classify_image_graph_def.pb', 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
         _ = tf.import_graph_def(graph_def, name='')
 
 
-def run_inference_on_image(image):
+def run_inference_on_image(image, guess_count=1):
     """Runs inference on an image.
 
     Parameters
@@ -120,16 +114,10 @@ def run_inference_on_image(image):
         # Creates node ID --> English string lookup.
         node_lookup = NodeLookup()
 
-        top_k = predictions.argsort()[-GUESS_COUNT:][::-1]
+        top_k = predictions.argsort()[-guess_count:][::-1]
 
         for node_id in top_k:
             human_string = node_lookup.id_to_string(node_id)
             score = predictions[node_id]
             print('%s (score = %.5f)' % (human_string, score))
         return human_string, score
-
-
-def a_test(_):
-    image = (FLAGS.image_file if FLAGS.image_file else
-             os.path.join(TEST_DIR, 'pencil.jpg'))
-    run_inference_on_image(image)
