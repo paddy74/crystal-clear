@@ -22,7 +22,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 PATH_TO_IMG = './resources/captures/'  # TODO: Not be global
 
 
-def load_gui(resolution=(-1, -1)):
+def load_gui(resolution=(640, 480)):
     """Create the graphical user interface with Kivy
 
     Parameters
@@ -32,7 +32,6 @@ def load_gui(resolution=(-1, -1)):
         indicates no camera was found.
     """
     Builder.load_file("kivy_gui.kv")
-
 
 class MenuScreen(Screen):
     """
@@ -49,22 +48,18 @@ class SettingsScreen(Screen):
 class HistoryScreen(Screen):
     """
     """
-
-    def __init__(self):
-        """
-        """
-        self.pictureID = 0.0  # Time stamp for currentImage table
-        # Time stamps for each button
-        self.pictureID0 = 0.0
-        self.pictureID1 = 0.0
-        self.pictureID2 = 0.0
-        self.pictureID3 = 0.0
-        self.pictureID4 = 0.0
-        self.pictureID5 = 0.0
-        self.pictureID6 = 0.0
-        self.pictureID7 = 0.0
-        self.pictureID8 = 0.0
-        self.pictureID9 = 0.0
+    pictureID = 0.0  # Time stamp for currentImage table
+    # Time stamps for each button
+    pictureID0 = 0.0
+    pictureID1 = 0.0
+    pictureID2 = 0.0
+    pictureID3 = 0.0
+    pictureID4 = 0.0
+    pictureID5 = 0.0
+    pictureID6 = 0.0
+    pictureID7 = 0.0
+    pictureID8 = 0.0
+    pictureID9 = 0.0
 
     def selectImage(self):
         """
@@ -251,18 +246,14 @@ class HistoryScreen(Screen):
 class ImageScreen(Screen):
     """
     """
-
-    def __init(self):
-        """
-        """
-        # Variable to hold information in label
-        self.objectInformation = StringProperty()
-        # Values to be set on db query
-        self.word = ""
-        self.clevel = 0.0
-        self.translatedWord = ""
-        self.timeStamp = 0.0
-        self.definition = ""
+    # Variable to hold information in label
+    objectInformation = StringProperty()
+    # Values to be set on db query
+    word = ""
+    clevel = 0.0
+    translatedWord = ""
+    timeStamp = 0.0
+    definition = ""
 
     def playSound(self):
         """
@@ -326,13 +317,9 @@ class ImageScreen(Screen):
 class LanguagesScreen(Screen):
     """
     """
-
-    def __init__(self):
-        """
-        """
-        self.button_text = StringProperty('English')
-        self.button_text2 = StringProperty('Spanish')
-
+    button_text = StringProperty('English')
+    button_text2 = StringProperty('Spanish')
+    
     def __init__(self, **kwargs):
         """
         """
@@ -352,11 +339,10 @@ class LanguagesScreen(Screen):
 
 
 class PowerScreen(Screen):
-    def __init__(self):
-        """
-        """
-        self.pressed = True
-        self.not_pressed = False
+    """
+    """
+    pressed = True
+    not_pressed = False
 
     def start(self):
         """
@@ -427,13 +413,9 @@ class DownloadScreen(Screen):
 class CameraScreen(Screen):
     """
     """
-
-    def __init__(self):
-        """
-        """
-        objectLabel = StringProperty()
-        timeStamp = 0
-        translatedWord = ""
+    objectLabel = StringProperty()
+    timeStamp = 0
+    translatedWord = ""
 
     def playSound(self):
         """
@@ -574,15 +556,15 @@ class CrystalClear(App):
         """
         sm = ScreenManager()
 
-        sm.add_widget(MenuScreen())
-        sm.add_widget(SettingsScreen())
-        sm.add_widget(HistoryScreen())
-        sm.add_widget(PowerScreen())
-        sm.add_widget(IssueScreen())
-        sm.add_widget(LanguagesScreen())
-        sm.add_widget(CameraScreen())
-        sm.add_widget(DownloadScreen())
-        sm.add_widget(ImageScreen())
+        sm.add_widget(MenuScreen(name='menu'))
+        sm.add_widget(SettingsScreen(name='settings'))
+        sm.add_widget(HistoryScreen(name='hist'))
+        sm.add_widget(PowerScreen(name='power'))
+        sm.add_widget(IssueScreen(name='report'))
+        sm.add_widget(LanguagesScreen(name='langs'))
+        sm.add_widget(CameraScreen(name='cam'))
+        sm.add_widget(DownloadScreen(name='download'))
+        sm.add_widget(ImageScreen(name='img'))
 
         return sm
 
