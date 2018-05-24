@@ -32,7 +32,7 @@ def load_gui(resolution=(640, 480)):
         indicates no camera was found.
     """
     Builder.load_file("kivy_gui.kv")
-
+    
 class MenuScreen(Screen):
     """
     """
