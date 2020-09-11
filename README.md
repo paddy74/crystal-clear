@@ -53,9 +53,7 @@ See also the list of [contributors](graphs/contributors) who participated in thi
 
 ## License
 
-This project is licensed under either:
-* Apache License, Version 2.0 - [LICENSE-APACHE.md](LICENSE-APACHE.md)
-* MIT License - [LICENSE-MIT.md](LICENSE-MIT.md)
+This project is licensed under the Apache 2.0 License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgments
 
